@@ -51,6 +51,18 @@ void PlayScene::HandleEvents()
 			m_pPlayer->GetTransform()->position += glm::vec2(5.0f, 0.0f);
 			m_playerFacingRight = true;
 		}
+		else if(EventManager::Instance().IsKeyDown(SDL_SCANCODE_W))
+		{
+			m_pPlayer->SetAnimationState(PlayerAnimationState::PLAYER_RUN_RIGHT);
+			m_pPlayer->GetTransform()->position -= glm::vec2(0.0f, 5.0);
+		}
+		else if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_S))
+		{
+			m_pPlayer->SetAnimationState(PlayerAnimationState::PLAYER_RUN_RIGHT);
+			m_pPlayer->GetTransform()->position += glm::vec2(0.0f, 5.0);
+		}
+
+
 		else
 		{
 			if (m_playerFacingRight)
