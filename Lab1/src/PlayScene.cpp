@@ -117,6 +117,8 @@ void PlayScene::Start()
 
 	// Player Sprite
 	m_pPlayer = new Player();
+	m_pPlayer->GetTransform()->position = glm::vec2(50.0f, 50.0f);
+
 	AddChild(m_pPlayer);
 	m_playerFacingRight = true;
 
