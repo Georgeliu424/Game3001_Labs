@@ -25,6 +25,12 @@ void PlayScene::Draw()
 void PlayScene::Update()
 {
 	UpdateDisplayList();
+	{
+		if (m_pPlayer->GetTransform()->position.x >= (772))
+		{
+			Game::Instance().ChangeSceneState(SceneState::END);
+		}
+	}
 }
 
 void PlayScene::Clean()
@@ -61,6 +67,9 @@ void PlayScene::HandleEvents()
 			m_pPlayer->SetAnimationState(PlayerAnimationState::PLAYER_RUN_RIGHT);
 			m_pPlayer->GetTransform()->position += glm::vec2(0.0f, 5.0);
 		}
+
+
+
 
 
 		else
@@ -116,14 +125,12 @@ void PlayScene::GUI_Function() const
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("Lab1", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
+	ImGui::Begin("Game 3001 Lab1", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
 
 	static float float2[2] = { m_pPlayer->GetTransform()->position.x, m_pPlayer->GetTransform()->position.y };
 	if(ImGui::SliderFloat2("Player Position",float2, 0.0f, 800.0f))
 	{
-		std::cout << float2[0] << std::endl;
-		std::cout << float2[1] << std::endl;
-		std::cout << "---------------------------\n";
+		m_pPlayer->GetTransform()->position = glm::vec2(float2[0], float2[1]);
 	}
 	
 	ImGui::End();

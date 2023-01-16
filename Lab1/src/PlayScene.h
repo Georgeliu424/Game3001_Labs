@@ -27,6 +27,7 @@ private:
 	Player* m_pPlayer;
 	bool m_playerFacingRight;
 
+
 	
 };
 
