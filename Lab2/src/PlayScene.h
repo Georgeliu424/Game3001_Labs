@@ -3,7 +3,6 @@
 #define __PLAY_SCENE__
 
 #include "Scene.h"
-#include "Player.h"
 
 class PlayScene : public Scene
 {
@@ -23,9 +22,6 @@ private:
 	std::string m_guiTitle;
 	
 	glm::vec2 m_mousePosition;
-
-	Player* m_pPlayer;
-	bool m_playerFacingRight;
 
 
 	
