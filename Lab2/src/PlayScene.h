@@ -4,6 +4,7 @@
 
 #include "Scene.h"
 #include "Target.h"
+#include "Starship.h"
 class PlayScene : public Scene
 {
 public:
@@ -26,7 +27,7 @@ private:
 	//Game object
 
 	Target* m_pTarget;
-
+	Starship* m_pStarship;
 	
 };
 

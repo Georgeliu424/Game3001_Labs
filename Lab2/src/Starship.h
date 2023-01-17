@@ -1,11 +1,30 @@
 #pragma once
+#ifndef __STARSHIP__
+#define __STARSHIP__
+
 #include "DisplayObject.h"
-class Starship
+class Starship : public DisplayObject
 {
+public:
+
+	Starship();
+
+	~Starship() ;
+
+
+	//LifeCycle Functions
+	void Draw() override;
+	void Update() override;
+	void Clean() override;
+
+
+private:
+
+
+
+
+
 };
 
-class Starship :
-    public DisplayObject
-{
-};
+#endif
 

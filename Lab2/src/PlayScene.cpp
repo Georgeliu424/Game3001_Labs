@@ -64,6 +64,9 @@ void PlayScene::Start()
 	m_pTarget = new Target();//instantiate an object of type target
 	AddChild(m_pTarget);
 
+	m_pStarship = new Starship;
+	AddChild(m_pStarship);
+	m_pStarship->GetTransform()->position = glm::vec2(400.0f, 300.0f);
 
 	ImGuiWindowFrame::Instance().SetGuiFunction(std::bind(&PlayScene::GUI_Function, this));
 }
@@ -79,10 +82,10 @@ void PlayScene::GUI_Function() const
 	ImGui::Begin("Game 3001 Lab2", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
 
 	static float postion[2] = { m_pTarget->GetTransform()->position.x,
-	m_pTarget->GetTransform()->position.y);
+	m_pTarget->GetTransform()->position.y };
 	if (ImGui::SliderFloat("Target Position",postion,0.0f,800.0f))
 	{
-		
+		m_pTarget->GetTransform()->position = glm::vec2(postion[0], postion[1]);
 	}
 
 	
