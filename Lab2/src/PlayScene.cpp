@@ -60,6 +60,11 @@ void PlayScene::Start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
+	//ADD Target
+
+	m_pTarget = new Target();//instantiate an object of type target
+	AddChild(m_pTarget);
+
 
 	ImGuiWindowFrame::Instance().SetGuiFunction(std::bind(&PlayScene::GUI_Function, this));
 }
