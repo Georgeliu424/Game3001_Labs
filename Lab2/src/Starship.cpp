@@ -11,7 +11,7 @@ Starship::Starship()
 	GetRigidBody()->velocity = glm::vec2(0, 0);
 	GetRigidBody()->isColliding = false;
 
-	SetType(GameObjectType::STARSHIP);
+	SetType(GameObjectType::AGENT);
 }
 
 Starship::~Starship() = default;
