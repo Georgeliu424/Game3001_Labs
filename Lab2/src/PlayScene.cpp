@@ -76,7 +76,7 @@ void PlayScene::Start()
 	ImGuiWindowFrame::Instance().SetGuiFunction(std::bind(&PlayScene::GUI_Function, this));
 }
 
-void PlayScene::GUI_Function() const
+void PlayScene::GUI_Function()
 {
 	// Always open with a NewFrame
 	ImGui::NewFrame();
@@ -102,6 +102,7 @@ void PlayScene::GUI_Function() const
 	if (ImGui::SliderFloat("Target Position",postion,0.0f,800.0f))
 	{
 		m_pTarget->GetTransform()->position = glm::vec2(postion[0], postion[1]);
+		m_pStarship->SetTargetPosition((m_pTarget->GetTransform()->position));
 	}
 
 	ImGui::Separator();

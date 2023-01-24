@@ -36,6 +36,7 @@ void Starship::Draw()
 
 void Starship::Update()
 {
+	m_move();
 }
 
 void Starship::Clean()
@@ -79,21 +80,42 @@ void Starship::SetAccelerationRate(float rate)
 
 void Starship::SetDesiredVelocity(glm::vec2 target_postion)
 {
+	SetTargetPosition((target_postion));
+	m_desiredVelocity = Util::Normalize(target_postion - GetTransform()->position) * GetMaxSpeed();
+	GetRigidBody()->velocity = m_desiredVelocity - GetRigidBody()->velocity;
+
 }
 
 void Starship::seek()
 {
+	SetDesiredVelocity((GetTargetPosition()));
+	const glm::vec2 steering_direction = GetDesiredVelocity() - GetCurrentDirection();
+
+	Lookwhereyouregoing(steering_direction);
+
+	GetRigidBody()->acceleration = GetCurrentDirection() * GetAccelerationRate();
 }
 
 void Starship::Lookwhereyouregoing(glm::vec2 target_direction)
 {
+	const float target_rotation = Util::SignedAngle(GetCurrentDirection(), target_direction);
+	const float turn_sensitivity = 5.0f;
+	if (abs(target_rotation)>turn_sensitivity)
+	{
+		if (target_rotation>0.0f)
+		{
+			SetCurrentHeading() + GetTurnRate();
+		}
+	}
 }
+
 
 void Starship::m_move()
 {
+	seek();
 	//Kinematic equation
 
-	const float dt = Game::Instance().GetDeltatime();
+	const float dt = Game::Instance().GetDeltaTime();
 
 	const glm::vec2 initial_postion = GetTransform()->position;
 
