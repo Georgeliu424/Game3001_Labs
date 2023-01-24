@@ -119,7 +119,7 @@ void Starship::m_move()
 
 	const glm::vec2 initial_postion = GetTransform()->position;
 
-	const glm::vec2 velocity_term = GetRigidBody()->velocity * dt;
+	const glm::vec2 velocity_term = GetRigidBody()->velocity *GetMaxSpeed()* dt;
 
 	const glm::vec2 acceleration_term = GetRigidBody()->acceleration * 0.5f;
 
@@ -128,6 +128,8 @@ void Starship::m_move()
 	GetTransform()->position = final_postion;
 
 	GetRigidBody()->velocity += GetRigidBody()->acceleration;
+
+	GetRigidBody()->velocity *= GetMaxSpeed();
 
 	GetRigidBody()->velocity = Util::Clamp(GetRigidBody()->velocity, GetMaxSpeed());
 
