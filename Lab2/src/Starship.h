@@ -2,8 +2,8 @@
 #ifndef __STARSHIP__
 #define __STARSHIP__
 
-#include "DisplayObject.h"
-class Starship : public DisplayObject
+#include "Agent.h"
+class Starship : public Agent
 {
 public:
 
