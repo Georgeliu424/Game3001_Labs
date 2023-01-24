@@ -1,5 +1,9 @@
 #include "Starship.h"
+
+#include "Game.h"
 #include "TextureManager.h"
+#include "Util.h"
+
 Starship::Starship()
 {
 	TextureManager::Instance().Load("../Assets/textures/ncl.png", "starship");
@@ -87,4 +91,22 @@ void Starship::Lookwhereyouregoing(glm::vec2 target_direction)
 
 void Starship::m_move()
 {
+	//Kinematic equation
+
+	const float dt = Game::Instance().GetDeltatime();
+
+	const glm::vec2 initial_postion = GetTransform()->position;
+
+	const glm::vec2 velocity_term = GetRigidBody()->velocity * dt;
+
+	const glm::vec2 acceleration_term = GetRigidBody()->acceleration * 0.5f;
+
+
+	glm::vec2 final_postion = initial_postion + velocity_term + acceleration_term;
+	GetTransform()->position = final_postion;
+
+	GetRigidBody()->velocity += GetRigidBody()->acceleration;
+
+	GetRigidBody()->velocity = Util::Clamp(GetRigidBody()->velocity, GetMaxSpeed());
+
 }

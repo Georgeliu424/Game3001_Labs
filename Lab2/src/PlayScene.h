@@ -19,7 +19,7 @@ public:
 	virtual void Start() override;
 private:
 	// IMGUI Function
-	void GUI_Function() const;
+	void GUI_Function();
 	std::string m_guiTitle;
 	
 	glm::vec2 m_mousePosition;
@@ -28,6 +28,10 @@ private:
 
 	Target* m_pTarget;
 	Starship* m_pStarship;
+
+	//debugging variables
+	bool m_bDebugView;
+
 	
 };
 
