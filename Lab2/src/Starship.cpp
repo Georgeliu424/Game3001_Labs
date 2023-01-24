@@ -104,7 +104,7 @@ void Starship::Lookwhereyouregoing(glm::vec2 target_direction)
 	{
 		if (target_rotation>0.0f)
 		{
-			SetCurrentHeading() + GetTurnRate();
+			SetCurrentHeading(GetCurrentHeading()- GetTurnRate());
 		}
 	}
 }
@@ -114,6 +114,13 @@ void Starship::m_move()
 {
 	seek();
 	//Kinematic equation
+	//maybe a switch-case
+	//switch behaviour
+	// case (seek, arrive, flee, avoidance)
+
+
+
+
 
 	const float dt = Game::Instance().GetDeltaTime();
 
