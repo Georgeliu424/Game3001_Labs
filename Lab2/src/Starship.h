@@ -23,13 +23,13 @@ public:
 	float GetAccelerationRate() const;
 	glm::vec2 GetDesiredVelocity() const;
 
-	void SetMaxSoeed(float Speed);
-	void SetTurnRate(float Angle);
+	void SetMaxSpeed(float speed);
+	void SetTurnRate(float angle);
 	void SetAccelerationRate(float rate);
 	void SetDesiredVelocity(glm::vec2 target_postion);
 
 	void seek();
-	void Lookwhereyouregoing(glm::vec2 target_direction);
+	void LookwhereYouregoing(glm::vec2 target_direction);
 
 
 private:
@@ -39,8 +39,10 @@ private:
 	float m_accelerationRate;
 
 
+	//where we want to go 
 	glm::vec2 m_desiredVelocity;
 
+	//private function
 	void m_move();
 
 
