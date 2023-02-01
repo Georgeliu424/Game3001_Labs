@@ -74,7 +74,7 @@ void Agent::SetWhiskerAngle(const float angle)
 	m_whiskerAngle = angle;
 }
 
-void Agent::UpdateWhiskerAngle(const float angle)
+void Agent::UpdateWhiskers(const float angle)
 {
 	m_whiskerAngle = angle;
 

@@ -20,13 +20,13 @@ StarShip::StarShip()
 	SetType(GameObjectType::AGENT);
 
 	// Starting Motion Properties
-	m_maxSpeed = 50.0f; // a maximum number of pixels moved per frame
+	m_maxSpeed = 20.0f; // a maximum number of pixels moved per frame
 	m_turnRate = 5.0f; // a maximum number of degrees to turn each time-step
 	m_accelerationRate = 4.0f; // a maximum number of pixels to add to the velocity each frame
 
 	SetCurrentDirection(glm::vec2(1.0f, 0.0f)); // Facing Right
 
-	SetLOSDistance(300.0f); 
+	SetLOSDistance(500.0f); 
 
 }
 
@@ -86,9 +86,9 @@ void StarShip::SetAccelerationRate(const float rate)
 
 void StarShip::SetDesiredVelocity(const glm::vec2 target_position)
 {
-	SetTargetPosition(target_position);
+	//SetTargetPosition(target_position);
 	m_desiredVelocity = Util::Normalize(target_position - GetTransform()->position);
-	GetRigidBody()->velocity = m_desiredVelocity - GetRigidBody()->velocity;
+	//GetRigidBody()->velocity = m_desiredVelocity - GetRigidBody()->velocity;
 }
 
 void StarShip::Seek()
@@ -104,10 +104,19 @@ void StarShip::Seek()
 
 void StarShip::LookWhereYoureGoing(const glm::vec2 target_direction)
 {
-	const float target_rotation = Util::SignedAngle(GetCurrentDirection(), target_direction - 90.0f);
+	float target_rotation = Util::SignedAngle(GetCurrentDirection(), target_direction - 90.0f);
 
-	const float turn_sensitivity = 3.0f;
-
+	constexpr  float turn_sensitivity = 3.0f;
+	
+	if (GetCollisionWhiskers()[0] || GetCollisionWhiskers()[1])
+	{
+		target_rotation += GetTurnRate() * turn_sensitivity;
+	}
+	else if (GetCollisionWhiskers()[2])
+	{
+		target_rotation -= GetTurnRate() * turn_sensitivity;
+	}
+	
 	SetCurrentHeading(Util::LerpUnclamped(GetCurrentHeading()
 		, GetCurrentHeading() + target_rotation, GetTurnRate() * Game::Instance().GetDeltaTime())); 
 }
@@ -116,7 +125,7 @@ void StarShip::m_move()
 {
 	Seek();
 
-	UpdateWhiskerAngle(GetWhiskerAngle());
+	UpdateWhiskers(GetWhiskerAngle());
 
 	// maybe a switch - case
 

@@ -210,6 +210,19 @@ void PlayScene::GUI_Function()
 	}
 
 	ImGui::Separator();
+
+	//whisker properties
+	static float whisker_angle = m_pStarShip->GetWhiskerAngle();
+	if (ImGui::SliderFloat("Whisker Angle",&whisker_angle, 10.0f,60.0f))
+	{
+		m_pStarShip->UpdateWhiskers(whisker_angle);
+	}
+
+
+
+
+	ImGui::Separator();
+
 	if(ImGui::Button("Reset"))
 	{
 		// reset StarShip's Position

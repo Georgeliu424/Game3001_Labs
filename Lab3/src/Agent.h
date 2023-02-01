@@ -48,7 +48,8 @@ public:
 	void SetLineColour(int index, glm::vec4 colour);
 	void SetWhiskerAngle(float angle);
 
-	void UpdateWhiskerAngle(float angle);
+
+	void UpdateWhiskers(float angle);
 
 private:
 	void ChangeDirection();
