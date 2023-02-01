@@ -143,12 +143,11 @@ void PlayScene::GUI_Function()
 
 	ImGui::Separator();
 
-	static float Obstacle_position[2] = { m_pTarget->GetTransform()->position.x,
-		m_pTarget->GetTransform()->position.y };
-	if (ImGui::SliderFloat2("Obstacle Position", Obstacle_position, 0.0f, 800.0f))
+	static float obstacle_position[2] = { m_pObsatcle->GetTransform()->position.x,
+		m_pObsatcle->GetTransform()->position.y };
+	if (ImGui::SliderFloat2("Obstacle Position", obstacle_position, 0.0f, 800.0f))
 	{
-		m_pTarget->GetTransform()->position = glm::vec2(Obstacle_position[0], Obstacle_position[1]);
-		m_pStarShip->SetTargetPosition(m_pTarget->GetTransform()->position);
+		m_pObsatcle->GetTransform()->position = glm::vec2(obstacle_position[0], obstacle_position[1]);
 	}
 
 	ImGui::Separator();
