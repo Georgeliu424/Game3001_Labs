@@ -9,6 +9,71 @@ Agent::Agent()
 Agent::~Agent()
 = default;
 
+void Agent::Draw()
+{
+}
+
+void Agent::Update()
+{
+}
+
+void Agent::Clean()
+{
+}
+
+glm::vec2 Agent::getLeftLOSEndPoint() const
+{
+	return m_leftLOSEndPoint;
+}
+
+glm::vec2 Agent::getMiddleLOSEndPoint() const
+{
+	return m_middleLOSEndPoint;
+}
+
+glm::vec2 Agent::getRightLOSEndPoint() const
+{
+	return m_rightLOSEndPoint;
+}
+
+bool* Agent::GetCollisionWhiskers()
+{
+	return m_collisionWhiskers;
+}
+
+glm::vec4 Agent::GetLineColour(int index) const
+{
+	GetLineColour[index]
+}
+
+float Agent::GetWhiskerAngle() const
+{
+}
+
+void Agent::SetLeftLOSEndPoint(glm::vec2 point)
+{
+}
+
+void Agent::SetMiddleLOSEndPoint(glm::vec2 point)
+{
+}
+
+void Agent::SetRightLOSEndPoint(glm::vec2 point)
+{
+}
+
+void Agent::SetLineColour(int index, glm::vec4 colour)
+{
+}
+
+void Agent::SetWhiskerAngle(float Angle)
+{
+}
+
+void Agent::UpdateWhiskerAngle(float Angle)
+{
+}
+
 glm::vec2 Agent::GetTargetPosition() const
 {
 	return m_targetPosition;

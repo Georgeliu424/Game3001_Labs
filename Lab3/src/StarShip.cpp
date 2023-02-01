@@ -16,6 +16,7 @@ StarShip::StarShip()
 	GetRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	GetRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	GetRigidBody()->isColliding = false;
+	setIsCentered(true);
 	SetType(GameObjectType::AGENT);
 
 	// Starting Motion Properties
