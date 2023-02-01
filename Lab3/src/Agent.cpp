@@ -9,29 +9,18 @@ Agent::Agent()
 Agent::~Agent()
 = default;
 
-void Agent::Draw()
-{
-}
 
-void Agent::Update()
-{
-}
-
-void Agent::Clean()
-{
-}
-
-glm::vec2 Agent::getLeftLOSEndPoint() const
+glm::vec2 Agent::GetLeftLOSEndPoint() const
 {
 	return m_leftLOSEndPoint;
 }
 
-glm::vec2 Agent::getMiddleLOSEndPoint() const
+glm::vec2 Agent::GetMiddleLOSEndPoint() const
 {
 	return m_middleLOSEndPoint;
 }
 
-glm::vec2 Agent::getRightLOSEndPoint() const
+glm::vec2 Agent::GetRightLOSEndPoint() const
 {
 	return m_rightLOSEndPoint;
 }
@@ -41,37 +30,59 @@ bool* Agent::GetCollisionWhiskers()
 	return m_collisionWhiskers;
 }
 
-glm::vec4 Agent::GetLineColour(int index) const
+glm::vec4 Agent::GetLineColour(const int index) const
 {
-	GetLineColour[index]
+	return m_lineColour[index];
 }
 
 float Agent::GetWhiskerAngle() const
 {
+	return m_whiskerAngle;
 }
 
 void Agent::SetLeftLOSEndPoint(glm::vec2 point)
 {
+	m_leftLOSEndPoint = point;
 }
 
-void Agent::SetMiddleLOSEndPoint(glm::vec2 point)
+void Agent::SetMiddleLOSEndPoint(const glm::vec2 point)
 {
+	m_middleLOSEndPoint = point;
 }
 
-void Agent::SetRightLOSEndPoint(glm::vec2 point)
+void Agent::SetRightLOSEndPoint(const glm::vec2 point)
 {
+	m_rightLOSEndPoint = point;
 }
 
-void Agent::SetLineColour(int index, glm::vec4 colour)
+void Agent::SetLineColour(const int index, const glm::vec4 colour)
 {
+	m_lineColour[index] = colour;
 }
 
-void Agent::SetWhiskerAngle(float Angle)
+void Agent::SetWhiskerAngle(const float angle)
 {
+	m_whiskerAngle = angle;
 }
 
-void Agent::UpdateWhiskerAngle(float Angle)
+void Agent::UpdateWhiskerAngle(const float angle)
 {
+	m_whiskerAngle = angle;
+
+	SetMiddleLOSEndPoint(GetTransform()->position + GetCurrentDirection() * GetLOSDistance());
+
+	//left whisker
+	float x = sin(GetCurrentHeading() - m_whiskerAngle + 90.0f * Util::Deg2Rad);
+	float y = cos(GetCurrentHeading() - m_whiskerAngle + 90.0f * Util::Deg2Rad);
+	SetLeftLOSEndPoint(GetTransform()->position + glm::vec2(x, -y) * GetLOSDistance() * 0.75f);
+
+	//Right whisker
+	x = sin(GetCurrentHeading() - m_whiskerAngle + 90.0f * Util::Deg2Rad);
+	y = cos(GetCurrentHeading() - m_whiskerAngle + 90.0f * Util::Deg2Rad);
+	SetRightLOSEndPoint(GetTransform()->position + glm::vec2(x, -y) * GetLOSDistance() * 0.75f);
+
+
+
 }
 
 glm::vec2 Agent::GetTargetPosition() const
