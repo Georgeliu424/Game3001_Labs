@@ -44,7 +44,7 @@ bool CollisionManager::SquaredRadiusCheck(GameObject* object1, GameObject* objec
 
 }
 
-bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
+bool CollisionManager:: AABBCheck(GameObject* object1, GameObject* object2)
 {
 	// prepare relevant variables
 	 auto p1 = object1->GetTransform()->position;
@@ -80,11 +80,12 @@ bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 
 			object2->GetRigidBody()->isColliding = true;
 
-			switch (object2->GetType()) {
+			switch (object2->GetType())
+			{
 
 			case GameObjectType::OBSTACLE:
 				std::cout << "Collision with Obstacle!" << std::endl;
-				SoundManager::Instance().PlaySound("yay", 0);
+				SoundManager::Instance().PlaySound("thunder", 0);
 				break;
 			default:
 
