@@ -36,6 +36,13 @@ void PlayScene::Draw()
 				m_pStarShip->GetWidth(), m_pStarShip->GetHeight());
 
 			CollisionManager::RotateAABB(m_pStarShip, m_pStarShip->GetCurrentHeading());
+
+			Util::DrawLine(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetLeftLOSEndPoint(), m_pStarShip->GetLineColour(0));
+			Util::DrawLine(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetMiddleLOSEndPoint(), m_pStarShip->GetLineColour(1));
+			Util::DrawLine(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetRightLOSEndPoint(), m_pStarShip->GetLineColour(2));
 		}
 	}
 
@@ -50,6 +57,30 @@ void PlayScene::Update()
 	{
 		CollisionManager::CircleAABBCheck(m_pTarget, m_pStarShip);
 		CollisionManager::AABBCheck(m_pStarShip, m_pObsatcle);
+
+		//obstacle information
+		const auto boxWidth = m_pObsatcle->GetWidth();
+		const int halfBoxWidth = boxWidth * 0.5f;
+		const auto boxHeight = m_pObsatcle->GetHeight();
+		const int halfBoxHeight = boxHeight * 0.5f;
+		const auto boxStart = m_pObsatcle->GetTransform()->position - glm::vec2(halfBoxWidth, halfBoxHeight);
+
+		m_pStarShip->GetCollisionWhiskers()[0] = 
+			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position, 
+			m_pStarShip->GetLeftLOSEndPoint(), boxStart, boxWidth, boxHeight);
+		m_pStarShip->GetCollisionWhiskers()[1] =
+			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetMiddleLOSEndPoint(), boxStart, boxWidth, boxHeight);
+		m_pStarShip->GetCollisionWhiskers()[2] =
+			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetRightLOSEndPoint(), boxStart, boxWidth, boxHeight);
+
+		for (int i=0; i<3 ;++i)
+		{
+			m_pStarShip->SetLineColour(i, (m_pStarShip->GetCollisionWhiskers()[i]) ?
+				glm::vec4(1, 0, 0, 1) : glm::vec4(0, 1, 0, 1));
+		}
+
 	}
 }
 

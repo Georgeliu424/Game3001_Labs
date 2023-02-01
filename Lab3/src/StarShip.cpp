@@ -26,6 +26,8 @@ StarShip::StarShip()
 
 	SetCurrentDirection(glm::vec2(1.0f, 0.0f)); // Facing Right
 
+	SetLOSDistance(300.0f); 
+
 }
 
 StarShip::~StarShip()
@@ -102,29 +104,19 @@ void StarShip::Seek()
 
 void StarShip::LookWhereYoureGoing(const glm::vec2 target_direction)
 {
-	const float target_rotation = Util::SignedAngle(GetCurrentDirection(), target_direction);
+	const float target_rotation = Util::SignedAngle(GetCurrentDirection(), target_direction - 90.0f);
 
-	const float turn_sensitivity = 5.0f;
+	const float turn_sensitivity = 3.0f;
 
-	if(abs(target_rotation) > turn_sensitivity)
-	{
-		if(target_rotation > 0.0f)
-		{
-			// turn right
-			SetCurrentHeading(GetCurrentHeading() + GetTurnRate());
-		}
-		else if (target_rotation < 0.0f)
-		{
-			// turn left
-			SetCurrentHeading(GetCurrentHeading() - GetTurnRate());
-		}
-
-	}
+	SetCurrentHeading(Util::LerpUnclamped(GetCurrentHeading()
+		, GetCurrentHeading() + target_rotation, GetTurnRate() * Game::Instance().GetDeltaTime())); 
 }
 
 void StarShip::m_move()
 {
 	Seek();
+
+	UpdateWhiskerAngle(GetWhiskerAngle());
 
 	// maybe a switch - case
 
