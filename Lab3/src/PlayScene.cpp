@@ -45,6 +45,10 @@ void PlayScene::Draw()
 				m_pStarShip->GetMiddleLOSEndPoint(), m_pStarShip->GetLineColour(1));
 			Util::DrawLine(m_pStarShip->GetTransform()->position,
 				m_pStarShip->GetRightLOSEndPoint(), m_pStarShip->GetLineColour(2));
+			Util::DrawLine(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetMiddleLeftLOSEndPoint(), m_pStarShip->GetLineColour(3));
+			Util::DrawLine(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetMiddleRightLOSEndPoint(), m_pStarShip->GetLineColour(4));
 
 		}
 	}
@@ -78,8 +82,14 @@ void PlayScene::Update()
 		m_pStarShip->GetCollisionWhiskers()[2] =
 			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position,
 				m_pStarShip->GetRightLOSEndPoint(), boxStart, boxWidth, boxHeight);
+		m_pStarShip->GetCollisionWhiskers()[3] =
+			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetRightLOSEndPoint(), boxStart, boxWidth, boxHeight);
+		m_pStarShip->GetCollisionWhiskers()[4] =
+			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetRightLOSEndPoint(), boxStart, boxWidth, boxHeight);
 
-		for (int i = 0; i < 3; ++i)
+		for (int i = 0; i < 5; ++i)
 		{
 			m_pStarShip->SetLineColour(i, 
 				(m_pStarShip->GetCollisionWhiskers()[i]) ?

@@ -7,10 +7,13 @@ Agent::Agent()
 	m_lineColour[0] = glm::vec4(0, 1, 0, 1); //Green color for left Whisker
 	m_lineColour[1] = glm::vec4(0, 1, 0, 1); // Green color for middle Whisker
 	m_lineColour[2] = glm::vec4(0, 1, 0, 1); // Green Color for right Whisker
+	m_lineColour[3] = glm::vec4(0, 1, 0, 1);
+	
 
 	m_collisionWhiskers[0] = false;
 	m_collisionWhiskers[1] = false;
 	m_collisionWhiskers[2] = false;
+	m_collisionWhiskers[3] = false;
 
 	m_whiskerAngle = 45;
 }
@@ -63,6 +66,16 @@ glm::vec2 Agent::GetRightLOSEndPoint() const
 	return m_rightLOSEndPoint;
 }
 
+glm::vec2 Agent::GetMiddleLeftLOSEndPoint() const
+{
+	return m_middleLeftLOSEndPoint;
+}
+
+glm::vec2 Agent::GetMiddleRightLOSEndPoint() const
+{
+	return m_middleRightLOSEndPoint;
+}
+
 bool* Agent::GetCollisionWhiskers()
 {
 	return m_collisionWhiskers;
@@ -78,6 +91,8 @@ float Agent::GetWhiskerAngle() const
 	return m_whiskerAngle;
 }
 
+
+
 void Agent::SetLeftLOSEndPoint(const glm::vec2 point)
 {
 	m_leftLOSEndPoint = point;
@@ -92,6 +107,19 @@ void Agent::SetRightLOSEndPoint(const glm::vec2 point)
 {
 	m_rightLOSEndPoint = point;
 }
+
+void Agent::SetMiddleLeftLOSEndPoint(glm::vec2 point)
+{
+
+	m_middleLeftLOSEndPoint = point;
+}
+
+void Agent::SetMiddleRightLOSEndPoint(glm::vec2 point)
+{
+	m_middleLeftLOSEndPoint = point;
+}
+
+
 
 void Agent::SetLineColour(const int index, const glm::vec4 colour)
 {
@@ -119,6 +147,14 @@ void Agent::UpdateWhiskers(float angle)
 	y = cos(GetCurrentHeading() + m_whiskerAngle + 90.0f * Util::Deg2Rad);
 	SetRightLOSEndPoint(GetTransform()->position + glm::vec2(x, -y) * GetLOSDistance() * 0.75f);
 
+	//middle Right 
+	x = sin(GetCurrentHeading() + m_whiskerAngle + 75.0f * Util::Deg2Rad);
+	y = cos(GetCurrentHeading() + m_whiskerAngle + 75.0f * Util::Deg2Rad);
+	SetMiddleRightLOSEndPoint(GetTransform()->position + glm::vec2(x, -y) * GetLOSDistance() * 0.75f);
+	//middle Left
+	x = sin(GetCurrentHeading() - m_whiskerAngle + 105.0f * Util::Deg2Rad);
+	y = cos(GetCurrentHeading() - m_whiskerAngle + 105.0f * Util::Deg2Rad);
+	SetMiddleLeftLOSEndPoint(GetTransform()->position + glm::vec2(x, -y) * GetLOSDistance() * 0.75f);
 
 }
 
