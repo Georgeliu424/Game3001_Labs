@@ -12,9 +12,9 @@ public:
 	~Agent();
 
 	// Inherited via GameObject
-	void Draw() override;
-	void Update() override;
-	void Clean() override;
+	void Draw() override = 0;
+	void Update() override = 0;
+	void Clean() override = 0;
 
 	// getters
 	[[nodiscard]] glm::vec2 GetTargetPosition() const;
@@ -27,11 +27,10 @@ public:
 	[[nodiscard]] glm::vec2 GetLeftLOSEndPoint() const;
 	[[nodiscard]] glm::vec2 GetMiddleLOSEndPoint() const;
 	[[nodiscard]] glm::vec2 GetRightLOSEndPoint() const;
-	bool* GetCollisionWhiskers(); // return the pointer 
+
+	bool* GetCollisionWhiskers(); // return the entire array 
 	glm::vec4 GetLineColour(int index)const;
 	float GetWhiskerAngle() const;
-
-
 
 
 	// setters
@@ -48,8 +47,9 @@ public:
 	void SetLineColour(int index, glm::vec4 colour);
 	void SetWhiskerAngle(float angle);
 
-
+	//utility function
 	void UpdateWhiskers(float angle);
+
 
 private:
 	void ChangeDirection();
@@ -66,8 +66,10 @@ private:
 	glm::vec2 m_leftLOSEndPoint;
 	glm::vec2 m_middleLOSEndPoint;
 	glm::vec2 m_rightLOSEndPoint;
-	glm::vec4 m_lineColour[3];
-	bool m_collisionWhiskers[3];
+	glm::vec2 m_middleRightLOSEndPoint;
+	glm::vec2 m_middleLeftLOSEndPoint;
+	glm::vec4 m_lineColour[5];
+	bool m_collisionWhiskers[5];
 	float m_whiskerAngle;
 
 };

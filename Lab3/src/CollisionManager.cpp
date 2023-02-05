@@ -44,11 +44,11 @@ bool CollisionManager::SquaredRadiusCheck(GameObject* object1, GameObject* objec
 
 }
 
-bool CollisionManager:: AABBCheck(GameObject* object1, GameObject* object2)
+bool CollisionManager::AABBCheck(GameObject* object1, GameObject* object2)
 {
 	// prepare relevant variables
-	 auto p1 = object1->GetTransform()->position;
-	 auto p2 = object2->GetTransform()->position;
+	auto p1 = object1->GetTransform()->position;
+	auto p2 = object2->GetTransform()->position;
 	const auto p1_width = static_cast<float>(object1->GetWidth());
 	const auto p1_height = static_cast<float>(object1->GetHeight());
 	const auto p2_width = static_cast<float>(object2->GetWidth());
@@ -62,10 +62,8 @@ bool CollisionManager:: AABBCheck(GameObject* object1, GameObject* object2)
 
 	if (object2->isCentered())
 	{
-		p1 += glm::vec2(-p2_width * 0.5f, -p2_height * 0.5f);
+		p2 += glm::vec2(-p2_width * 0.5f, -p2_height * 0.5f);
 	}
-
-
 
 
 	if (
@@ -82,7 +80,7 @@ bool CollisionManager:: AABBCheck(GameObject* object1, GameObject* object2)
 
 			switch (object2->GetType())
 			{
-
+			
 			case GameObjectType::OBSTACLE:
 				std::cout << "Collision with Obstacle!" << std::endl;
 				SoundManager::Instance().PlaySound("thunder", 0);

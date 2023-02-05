@@ -24,9 +24,10 @@ void PlayScene::Draw()
 		// Draw Collider Bounds for the Target
 		Util::DrawCircle(m_pTarget->GetTransform()->position, m_pTarget->GetWidth() * 0.5f);
 
-		Util::DrawRect(m_pObsatcle->GetTransform()->position -
-			glm::vec2(m_pObsatcle->GetWidth() * 0.5f, m_pObsatcle->GetHeight() * 0.5f),
-			m_pObsatcle->GetWidth(), m_pObsatcle->GetHeight());
+		//Draw Obstacle Bounds
+		Util::DrawRect(m_pObstacle->GetTransform()->position -
+			glm::vec2(m_pObstacle->GetWidth() * 0.5f, m_pObstacle->GetHeight() * 0.5f),
+			m_pObstacle->GetWidth(), m_pObstacle->GetHeight());
 
 
 		if(m_pStarShip->IsEnabled())
@@ -37,12 +38,14 @@ void PlayScene::Draw()
 
 			CollisionManager::RotateAABB(m_pStarShip, m_pStarShip->GetCurrentHeading());
 
+			//draw whisker
 			Util::DrawLine(m_pStarShip->GetTransform()->position,
 				m_pStarShip->GetLeftLOSEndPoint(), m_pStarShip->GetLineColour(0));
 			Util::DrawLine(m_pStarShip->GetTransform()->position,
 				m_pStarShip->GetMiddleLOSEndPoint(), m_pStarShip->GetLineColour(1));
 			Util::DrawLine(m_pStarShip->GetTransform()->position,
 				m_pStarShip->GetRightLOSEndPoint(), m_pStarShip->GetLineColour(2));
+
 		}
 	}
 
@@ -56,18 +59,19 @@ void PlayScene::Update()
 	if(m_pStarShip->IsEnabled())
 	{
 		CollisionManager::CircleAABBCheck(m_pTarget, m_pStarShip);
-		CollisionManager::AABBCheck(m_pStarShip, m_pObsatcle);
+		CollisionManager::AABBCheck(m_pStarShip, m_pObstacle);
 
-		//obstacle information
-		const auto boxWidth = m_pObsatcle->GetWidth();
+		// obstacle information 
+		const auto boxWidth = m_pObstacle->GetWidth();
 		const int halfBoxWidth = boxWidth * 0.5f;
-		const auto boxHeight = m_pObsatcle->GetHeight();
+		const auto boxHeight = m_pObstacle->GetHeight();
 		const int halfBoxHeight = boxHeight * 0.5f;
-		const auto boxStart = m_pObsatcle->GetTransform()->position - glm::vec2(halfBoxWidth, halfBoxHeight);
+		const auto boxStart = m_pObstacle->GetTransform()->position - glm::vec2(halfBoxWidth, halfBoxHeight);
 
-		m_pStarShip->GetCollisionWhiskers()[0] = 
-			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position, 
-			m_pStarShip->GetLeftLOSEndPoint(), boxStart, boxWidth, boxHeight);
+		//check each whisker to see if it's colliding 
+		m_pStarShip->GetCollisionWhiskers()[0] =
+			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position,
+				m_pStarShip->GetLeftLOSEndPoint(), boxStart, boxWidth, boxHeight);
 		m_pStarShip->GetCollisionWhiskers()[1] =
 			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position,
 				m_pStarShip->GetMiddleLOSEndPoint(), boxStart, boxWidth, boxHeight);
@@ -75,11 +79,13 @@ void PlayScene::Update()
 			CollisionManager::LineRectCheck(m_pStarShip->GetTransform()->position,
 				m_pStarShip->GetRightLOSEndPoint(), boxStart, boxWidth, boxHeight);
 
-		for (int i=0; i<3 ;++i)
+		for (int i = 0; i < 3; ++i)
 		{
-			m_pStarShip->SetLineColour(i, (m_pStarShip->GetCollisionWhiskers()[i]) ?
+			m_pStarShip->SetLineColour(i, 
+				(m_pStarShip->GetCollisionWhiskers()[i]) ?
 				glm::vec4(1, 0, 0, 1) : glm::vec4(0, 1, 0, 1));
 		}
+
 
 	}
 }
@@ -118,7 +124,7 @@ void PlayScene::Start()
 	// Add the Target to the Scene
 	m_pTarget = new Target(); // instantiate an object of type Target
 	m_pTarget->GetTransform()->position = glm::vec2(650.0f, 300.0f);
-	AddChild(m_pTarget, 1,2);
+	AddChild(m_pTarget,1,2);
 
 	// Add the StarShip to the Scene
 	m_pStarShip = new StarShip();
@@ -128,9 +134,10 @@ void PlayScene::Start()
 	m_pStarShip->SetEnabled(false);
 	AddChild(m_pStarShip,2);
 
-	m_pObsatcle = new Obstacle();
+	//Add Obstacle to the Scene
+	m_pObstacle = new Obstacle();
+	AddChild(m_pObstacle,1,1);
 
-	AddChild(m_pObsatcle,1,1);
 
 	// Preload Sounds
 
@@ -164,21 +171,23 @@ void PlayScene::GUI_Function()
 	ImGui::Separator();
 
 	// Target Properties
-	static float target_position[2] = { m_pTarget->GetTransform()->position.x,
+	static float target_postion[2] = { m_pTarget->GetTransform()->position.x,
 		m_pTarget->GetTransform()->position.y };
-	if(ImGui::SliderFloat2("Target Position", target_position, 0.0f, 800.0f))
+	if(ImGui::SliderFloat2("Target Position", target_postion, 0.0f, 800.0f))
 	{
-		m_pTarget->GetTransform()->position = glm::vec2(target_position[0], target_position[1]);
+		m_pTarget->GetTransform()->position = glm::vec2(target_postion[0], target_postion[1]);
 		m_pStarShip->SetTargetPosition(m_pTarget->GetTransform()->position);
 	}
 
 	ImGui::Separator();
 
-	static float obstacle_position[2] = { m_pObsatcle->GetTransform()->position.x,
-		m_pObsatcle->GetTransform()->position.y };
-	if (ImGui::SliderFloat2("Obstacle Position", obstacle_position, 0.0f, 800.0f))
+	// obstacle Properties
+	static float obstacle_postion[2] = { m_pObstacle->GetTransform()->position.x,
+		m_pObstacle->GetTransform()->position.y };
+	if (ImGui::SliderFloat2("obstacle Position", obstacle_postion, 0.0f, 800.0f))
 	{
-		m_pObsatcle->GetTransform()->position = glm::vec2(obstacle_position[0], obstacle_position[1]);
+		m_pObstacle->GetTransform()->position = glm::vec2(obstacle_postion[0], obstacle_postion[1]);
+		
 	}
 
 	ImGui::Separator();
@@ -213,16 +222,14 @@ void PlayScene::GUI_Function()
 
 	//whisker properties
 	static float whisker_angle = m_pStarShip->GetWhiskerAngle();
-	if (ImGui::SliderFloat("Whisker Angle",&whisker_angle, 10.0f,60.0f))
+	if (ImGui::SliderFloat("Whisker Angle", &whisker_angle, 10.0f, 60.0f))
 	{
 		m_pStarShip->UpdateWhiskers(whisker_angle);
 	}
 
 
 
-
 	ImGui::Separator();
-
 	if(ImGui::Button("Reset"))
 	{
 		// reset StarShip's Position

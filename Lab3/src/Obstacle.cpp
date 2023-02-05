@@ -14,11 +14,10 @@ Obstacle::Obstacle()
 
 	GetTransform()->position = glm::vec2(450.0f, 300.0f);
 	setIsCentered(true);
-
 	SetType(GameObjectType::OBSTACLE);
 	GetRigidBody()->isColliding = false;
 
-
+	
 }
 
 Obstacle::~Obstacle()
