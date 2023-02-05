@@ -108,13 +108,32 @@ void StarShip::LookWhereYoureGoing(const glm::vec2 target_direction)
 
 	constexpr  float turn_sensitivity = 3.0f;
 
-	if (GetCollisionWhiskers()[0] ||GetCollisionWhiskers()[1])
+	if (GetCollisionWhiskers()[0] && GetCollisionWhiskers()[1] == false)
 	{
-		target_rotation += GetTurnRate() * turn_sensitivity;
+		SetCurrentHeading(GetCurrentHeading() + GetTurnRate() / 2);
 	}
-	else if (GetCollisionWhiskers()[2])
+	else if (GetCollisionWhiskers()[1])
 	{
-		target_rotation -= GetTurnRate() * turn_sensitivity;
+		SetCurrentHeading(GetCurrentHeading() + GetTurnRate());
+	}
+	else if (GetCollisionWhiskers()[4] && GetCollisionWhiskers()[3] == false)
+	{
+		SetCurrentHeading(GetCurrentHeading() + GetTurnRate() / 2);
+	}
+	else if (GetCollisionWhiskers()[3])
+	{
+		SetCurrentHeading(GetCurrentHeading() + GetTurnRate());
+	}
+	else if (abs(target_rotation) > turn_sensitivity)
+	{
+		if (target_rotation > 0.0f)
+		{
+			SetCurrentHeading(GetCurrentHeading() + GetTurnRate());
+		}
+		else if (target_rotation < 0.0f)
+		{
+			SetCurrentHeading(GetCurrentHeading() + GetTurnRate());
+		}
 	}
 
 
