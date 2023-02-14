@@ -239,6 +239,21 @@ void PlayScene::GUI_Function()
 
 	ImGui::Separator();
 
+	//Select the heuristic
+	static int radio = static_cast<int>(m_currentHeuristic);
+	ImGui::Text("Heuristic type");
+	ImGui::RadioButton("Manhattan", &radio, static_cast<int>(Heuristic::MANHATTAN));
+	ImGui::SameLine();
+	ImGui::RadioButton("Euclidean", &radio, static_cast<int>(Heuristic::EUCLIDEAN));
+
+	//check if current heuristic is not the same as the selection
+	if (m_currentHeuristic != static_cast<Heuristic>(radio))
+	{
+		m_currentHeuristic = static_cast<Heuristic>(radio);
+		m_computeTileCosts();
+	}
+
+	ImGui::Separator();
 	// StarShip Properties
 	static int start_position[2] = {
 		static_cast<int>(m_pStarShip->GetGridPosition().x),
@@ -281,6 +296,7 @@ void PlayScene::GUI_Function()
 			m_getTile(goal_position[0], goal_position[1])->GetTransform()->position + offset;
 		m_pTarget->SetGridPosition(goal_position[0], goal_position[1]);
 		m_getTile(m_pTarget->GetGridPosition())->SetTileStatus(TileStatus::GOAL);
+		m_computeTileCosts();
 	}
 
 	ImGui::Separator();
