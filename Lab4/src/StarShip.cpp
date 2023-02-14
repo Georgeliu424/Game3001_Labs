@@ -42,7 +42,7 @@ void StarShip::Draw()
 
 void StarShip::Update()
 {
-	m_move();
+	//m_move();
 }
 
 void StarShip::Clean()

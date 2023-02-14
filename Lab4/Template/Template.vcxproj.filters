@@ -31,8 +31,8 @@
     <Filter Include="DOCS">
       <UniqueIdentifier>{a44d29c3-2835-4901-a310-0039121b84b9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Navgitaion">
-      <UniqueIdentifier>{58e9de78-b86e-48c5-855c-590714913d76}</UniqueIdentifier>
+    <Filter Include="Navigation">
+      <UniqueIdentifier>{169200d8-74ff-4d41-9774-97b94a2c7916}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="..\src\StarShip.cpp">
       <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Tile.cpp">
+      <Filter>Navigation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,11 +302,14 @@
     <ClInclude Include="..\src\StarShip.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\NeighbourTile.h">
+    <ClInclude Include="..\..\..\GAME3001-W2023-Labs-A\GAME3001-W2023-Lab4\src\NeighbourTile.h">
       <Filter>Enums</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\TileStatus.h">
+    <ClInclude Include="..\..\..\GAME3001-W2023-Labs-A\GAME3001-W2023-Lab4\src\TileStatus.h">
       <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Tile.h">
+      <Filter>Navigation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,8 @@
 
 #include "NavigationObject.h"
 
-class Target final : public NavigationObject {
+class Target final : public NavigationObject
+{
 public:
 	Target();
 	~Target() override;
