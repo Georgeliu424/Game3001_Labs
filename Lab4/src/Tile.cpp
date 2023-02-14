@@ -41,12 +41,12 @@ void Tile::Clean()
 
 Tile* Tile::GetNeighbourTile(const NeighbourTile position) const
 {
-	return m_neighbours[position];
+	return m_neighbours[static_cast<int>(position)];
 }
 
 void Tile::SetNeighbourTile(const NeighbourTile position, Tile* tile)
 {
-	m_neighbours[position] = tile;
+	m_neighbours[static_cast<int>(position)] = tile;
 }
 
 float Tile::GetTileCost() const
