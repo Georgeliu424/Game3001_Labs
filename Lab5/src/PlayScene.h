@@ -69,8 +69,10 @@ private:
 	Tile* m_getTile(glm::vec2 grid_position) const;
 
 	template <typename T>
-	T* m_addNavigationObjectToGrid(T* object, int col, int row, TileStatus status);
+	void m_addObjectToGrid(T*& object, int col, int row, TileStatus status);
 
+	template<typename T>
+	void m_moveGameObject(T*& object, int col, int row, TileStatus status);
 
 	// heuristic
 	Heuristic m_currentHeuristic;
