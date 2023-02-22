@@ -325,6 +325,44 @@ void PlayScene::m_computeTileCosts()
 	}
 }
 
+void PlayScene::m_buildObstacles()
+{
+	for (int i=0;i<300;++i)
+	{
+		m_pObstacles.push_back(new Obstacle());
+	}
+}
+
+void PlayScene::m_removeObstacleAt(const int col,const int row)
+{
+	for (const auto& obstacle : m_pObstacles)
+	{
+		if (obstacle!=nullptr)
+		{
+			if (static_cast<int>(obstacle->GetGridPosition().x)==col&&static_cast<int>(obstacle->GetGridPosition().y)==row)
+			{
+				RemoveChild(obstacle);
+				m_pObstacles[(row * Config::COL_NUM) + col] = new Obstacle();
+			}
+		}
+	}
+}
+
+void PlayScene::m_removeObstacleAt(const glm::vec2 grid_position)
+{
+	m_removeObstacleAt(static_cast<int>(grid_position.x), static_cast<int>(grid_position.y));
+}
+
+void PlayScene::m_removeAllObstacles()
+{
+	for (const auto& obstacle:m_pObstacles)
+	{
+		RemoveChild(obstacle);
+	}
+	m_pObstacles.clear();
+}
+
+
 void PlayScene::m_findShortestPath()
 {
 	
