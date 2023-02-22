@@ -76,6 +76,15 @@ private:
 
 	// heuristic
 	Heuristic m_currentHeuristic;
+
+	//Tile map variables and functions
+	std::string m_tileMap;
+	void m_initializeTileMap();
+	void m_buildTileMap();
+
+	// convenience functions to update the Tile Map
+	void m_updateTileMap(int col, int row, TileStatus status);
+	void m_updateTileMap(glm::vec2 grid_position, TileStatus status);
 };
 
 #endif /* defined (__PLAY_SCENE__) */
