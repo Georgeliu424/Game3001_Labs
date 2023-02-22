@@ -54,46 +54,33 @@ void PlayScene::HandleEvents()
 }
 
 template <typename T>
-T* PlayScene::m_addNavigationObjectToGrid(T* object, const int col, const int row, const TileStatus status)
+void PlayScene::m_addObjectToGrid(T*& object, const int col, const int row, const TileStatus status)
 {
-	const auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
-	object = new T();
+	constexpr auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
+	//added the T type object to the scene
+	object = new T();//instantiate an object of type T 
 	object->GetTransform()->position = m_getTile(col, row)->GetTransform()->position + offset;
-	object->SetGridPosition(static_cast<float>(col), static_cast<float>(row));
+	object->SetGridPosition(static_cast<float>(col), static_cast<float>(row));//Record grid space position
 	m_getTile(col, row)->SetTileStatus(status);
 	AddChild(object);
-	return object;
 }
-
-void PlayScene::m_markImpassable()
+template<typename T>
+void PlayScene::m_moveGameObject(T*& object, const int col, const int row, TileStatus status)
 {
-	m_addNavigationObjectToGrid(m_pObstacleList[0], 9, 0, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[1], 9, 1, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[2], 9, 2, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[3], 9, 3, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[4], 9, 4, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[5], 9, 5, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[6], 9, 6, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[7], 9, 7, TileStatus::IMPASSABLE);
+	constexpr auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
 
-	m_addNavigationObjectToGrid(m_pObstacleList[8], 5, 6, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[9], 5, 7, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[10], 5, 8, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[11], 5, 9, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[12], 5, 10, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[13], 5, 11, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[14], 5, 12, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[15], 5, 13, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[16], 5, 14, TileStatus::IMPASSABLE);
+	if (m_getTile(object->GetGridPosition())->GetTileStatus()!=TileStatus::IMPASSABLE)
+	{
+		m_getTile(object->GetGridPosition())->SetTileStatus(TileStatus::UNVISITED);
+	}
+	object->GetTransform()->position = m_getTile(col, row)->GetTransform()->position + offset;
+	object->SetGridPosition(static_cast<float>(col),static_cast<float>(row));
 
-	m_addNavigationObjectToGrid(m_pObstacleList[17], 13, 7, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[18], 13, 8, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[19], 13, 9, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[20], 13, 10, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[21], 13, 11, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[22], 13, 12, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[23], 13, 13, TileStatus::IMPASSABLE);
-	m_addNavigationObjectToGrid(m_pObstacleList[24], 13, 14, TileStatus::IMPASSABLE);
+	if (m_getTile(object->GetGridPosition())->GetTileStatus() != TileStatus::IMPASSABLE)
+	{
+		m_getTile(object->GetGridPosition())->SetTileStatus(status);
+	}
+	
 }
 
 void PlayScene::Start()
@@ -106,12 +93,11 @@ void PlayScene::Start()
 	m_currentHeuristic = Heuristic::MANHATTAN;
 
 	// Add the Target to the Scene
-	m_pTarget = m_addNavigationObjectToGrid(m_pTarget, 15, 11, TileStatus::GOAL);
+	 m_addObjectToGrid(m_pTarget, 15, 11, TileStatus::GOAL);
 
 	// Add the StarShip to the Scene
-	m_pStarShip = m_addNavigationObjectToGrid(m_pStarShip, 1, 3, TileStatus::START);
+	 m_addObjectToGrid(m_pStarShip, 1, 3, TileStatus::START);
 
-	m_markImpassable();
 
 	// Preload Sounds
 
@@ -133,7 +119,7 @@ void PlayScene::GUI_Function()
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("GAME3001 - W2023 - Lab4", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
+	ImGui::Begin("GAME3001 - W2023 - Lab5", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
 
 	ImGui::Separator();
 
@@ -173,13 +159,7 @@ void PlayScene::GUI_Function()
 		{
 			start_position[1] = Config::ROW_NUM - 1;
 		}
-
-		// convert grid space to world space
-		m_getTile(m_pStarShip->GetGridPosition())->SetTileStatus(TileStatus::UNVISITED);
-		m_pStarShip->GetTransform()->position = 
-			m_getTile(start_position[0], start_position[1])->GetTransform()->position + offset;
-		m_pStarShip->SetGridPosition(start_position[0], start_position[1]);
-		m_getTile(m_pStarShip->GetGridPosition())->SetTileStatus(TileStatus::START);
+		m_moveGameObject(m_pStarShip, start_position[0], start_position[1], TileStatus::START);
 	}
 
 	ImGui::Separator();
@@ -196,12 +176,7 @@ void PlayScene::GUI_Function()
 			goal_position[1] = Config::ROW_NUM - 1;
 		}
 
-		// convert grid space to world space
-		m_getTile(m_pTarget->GetGridPosition())->SetTileStatus(TileStatus::UNVISITED);
-		m_pTarget->GetTransform()->position =
-			m_getTile(goal_position[0], goal_position[1])->GetTransform()->position + offset;
-		m_pTarget->SetGridPosition(goal_position[0], goal_position[1]);
-		m_getTile(m_pTarget->GetGridPosition())->SetTileStatus(TileStatus::GOAL);
+		m_moveGameObject(m_pTarget, goal_position[0], goal_position[1], TileStatus::GOAL);
 		m_computeTileCosts();
 	}
 
