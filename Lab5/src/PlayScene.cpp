@@ -1,7 +1,7 @@
 #include "PlayScene.h"
 #include "Game.h"
 #include "EventManager.h"
-
+#include <windows.h>
 // required for IMGUI
 #include "imgui.h"
 #include "imgui_sdl.h"
@@ -98,6 +98,8 @@ void PlayScene::Start()
 	m_buildTileMap();
 
 	m_computeTileCosts();
+
+	m_findShortestPath();
 
 	// Preload Sounds
 
@@ -333,24 +335,118 @@ void PlayScene::m_removeAllObstacles()
 		RemoveChild(obstacle);
 	}
 	m_pObstacles.clear();
-}
-
+} 
 
 void PlayScene::m_findShortestPath()
 {
-	
+	m_getTile(m_pStarShip->GetGridPosition())->SetTileParent(nullptr);
+	m_pOpenList.push(m_getTile(m_pStarShip->GetGridPosition()));
+	bool goal_found = false;
+
+	while (!m_pOpenList.empty() && !goal_found)
+	{
+		const auto current_node = m_pOpenList.top();// Tile with the Lowest F(distance estimate)
+		std::cout << current_node->GetGridPosition().x << "," << current_node->GetGridPosition().y << std::endl;
+
+		m_pOpenList.pop();
+		current_node->SetTileStatus(TileStatus::CLOSED);
+
+		for (auto neighbour:current_node->GetNeighbourTiles())
+		{
+			//ignore these
+			if (neighbour == nullptr ||neighbour->GetTileStatus()==TileStatus::IMPASSABLE )
+			{
+				 continue;
+			}
+			if (neighbour->GetTileStatus()==TileStatus::GOAL)
+			{
+				goal_found = true;
+				neighbour->SetTileParent(current_node);
+				std::cout <<"Goal Found at:"<< neighbour->GetGridPosition().x << "," << neighbour->GetGridPosition().y << std::endl;
+				m_pPathList.push_front(neighbour);
+				break;
+			}
+			if (neighbour->GetTileStatus()==TileStatus::UNVISITED)
+			{
+				neighbour->SetTileParent(current_node);
+				neighbour->SetTileStatus(TileStatus::OPEN);
+				m_pOpenList.push(neighbour);
+			}
+		}
+	}
+	if (goal_found)
+	{
+		m_pathFound = true;
+		m_buildPathList();
+		m_displayPathList();
+	}
+	else
+	{
+		const auto handle = GetStdHandle(STD_OUTPUT_HANDLE);
+		SetConsoleTextAttribute(handle, 4);//red text
+		std::cout << "No Path Found!" << std::endl;
+		SetConsoleTextAttribute(handle, 15);//white text
+	}
 }
 
-void PlayScene::m_displayPathList()
+void PlayScene::m_buildPathList()
 {
+	while (m_pPathList.front()->GetTileParent()!=nullptr)
+	{
+		m_pPathList.push_front(m_pPathList.front()->GetTileParent());
+	}
+}
+
+void PlayScene::m_displayPathList() const
+{
+	std::cout << "Total Path Length is:" << m_pPathList.size() - 1 << std::endl;
+	std::cout << "Path List is:" << std::endl;
+	std::cout << "===========================" << std::endl;
+	for (const auto node:m_pPathList)
+	{
+		node->SetTileStatus(TileStatus::PATH);
+		std::cout << node->GetGridPosition().x << "," << node->GetGridPosition().y << std::endl;
+	}
 }
 
 void PlayScene::m_resetPathFinding()
 {
+	//remove all nodes from the open list
+	while (!m_pOpenList.empty())
+	{
+		m_pOpenList.pop();
+	}
+	//remove all nodes from the path list
+	while (!m_pPathList.empty())
+	{
+		m_pPathList.pop_front();
+	}
+	//reset path found boolean
+	m_pathFound = false;
+
+	//mark all the tiles in the grid as UNVISITED
+	for  (const auto tile:m_pGrid) 
+	{
+		if (tile->GetTileStatus()==TileStatus::OPEN ||tile->GetTileStatus()==TileStatus::CLOSED ||tile->GetTileStatus()==TileStatus::PATH)
+		{
+			tile->SetTileStatus(TileStatus::UNVISITED);
+		}
+	}
+
+	m_getTile(m_pStarShip->GetGridPosition())->SetTileStatus(TileStatus::START);
+	m_getTile(m_pTarget->GetGridPosition())->SetTileStatus(TileStatus::GOAL);
 }
 
 void PlayScene::m_resetSimulation()
 {
+	m_removeAllObstacles();
+	m_buildObstacles();
+	RemoveChild(m_pStarShip);
+	RemoveChild(m_pTarget);
+	m_initializeTileMap();
+	m_buildTileMap();
+	m_computeTileCosts();
+	m_resetPathFinding();
 }
 
 Tile* PlayScene::m_getTile(const int col, const int row) const
@@ -374,22 +470,22 @@ void PlayScene::m_initializeTileMap()
 	m_tileMap += "--S------I----------";
 	m_tileMap += "---------I----------";
 	m_tileMap += "---------I----------";
-	m_tileMap += "----I--------I------";
-	m_tileMap += "----I--------I------";
-	m_tileMap += "----I--------I------";
-	m_tileMap += "----I--------I------";
-	m_tileMap += "----I--------I------";
-	m_tileMap += "----I--------I-G----";
-	m_tileMap += "----I--------I------";
-	m_tileMap += "----I--------I------";
-	m_tileMap += "----I--------I------";
+	m_tileMap += "-----I---I---I------";
+	m_tileMap += "-----I-------I------";
+	m_tileMap += "-----I-------I------";
+	m_tileMap += "-----I-------I------";
+	m_tileMap += "-----I-------I------";
+	m_tileMap += "-----I-------I-G----";
+	m_tileMap += "-----I-------I------";
+	m_tileMap += "-----I-------I------";
+	m_tileMap += "-----I`------I------";
 }
 
 void PlayScene::m_buildTileMap()
 {
-	for (int row =0;row<Config::ROW_NUM;++row)
+	for (int row = 0;row<Config::ROW_NUM;++row)
 	{
-		for (int col=0;col<Config::COL_NUM;++col)
+		for (int col= 0;col<Config::COL_NUM;++col)
 		{
 			if (m_tileMap[row*Config::COL_NUM+col]=='I')
 			{
@@ -405,7 +501,7 @@ void PlayScene::m_buildTileMap()
 			}
 			if (m_tileMap[(row * Config::COL_NUM )+ col] == '-')
 			{
-				m_getTile(col, row)->SetTileStatus(TileStatus::IMPASSABLE);
+				m_getTile(col, row)->SetTileStatus(TileStatus::UNVISITED);
 			}
 		}
 	}
