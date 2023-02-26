@@ -44,7 +44,7 @@ private:
 	bool m_getGridEnabled() const;
 	void m_setGridEnabled(bool state);
 	void m_computeTileCosts();
-
+	
 	// obstacle list
 	std::vector<Obstacle*> m_pObstacles;
 	void m_buildObstacles();
@@ -88,6 +88,12 @@ private:
 	// convenience functions to update the Tile Map
 	void m_updateTileMap(int col, int row, TileStatus status);
 	void m_updateTileMap(glm::vec2 grid_position, TileStatus status);
+
+	//Ship moving functions 
+	//int m_moveCounter = 0;
+	//bool m_shipIsMoving = false;
+	//void m_moveStarship();
+
 };
 
 #endif /* defined (__PLAY_SCENE__) */

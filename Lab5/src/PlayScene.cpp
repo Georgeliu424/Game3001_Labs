@@ -77,6 +77,7 @@ void PlayScene::m_moveGameObject(T*& object, const int col, const int row, TileS
 	object->GetTransform()->position = m_getTile(col, row)->GetTransform()->position + offset;
 	object->SetGridPosition(static_cast<float>(col),static_cast<float>(row));
 
+
 	if (m_getTile(object->GetGridPosition())->GetTileStatus() != TileStatus::IMPASSABLE)
 	{
 		m_getTile(object->GetGridPosition())->SetTileStatus(status);
@@ -633,3 +634,28 @@ void PlayScene::m_updateTileMap(const glm::vec2 grid_position, const TileStatus 
 {
 	m_updateTileMap(static_cast<int>(grid_position.x), static_cast<int>(grid_position.y), status);
 }
+
+//void PlayScene::m_moveStarship()
+//{
+//	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
+//	if (m_moveCounter<m_pPathList.size())
+//	{
+//		m_pStarShip->GetTransform()->position = m_getTile()->GetTransform()->position + offset;
+//		m_pStarShip->SetGridPosition(GetGridPosition().x,GetGridPosition().y);
+//		if (Game::Instance().GetFrames()%20==0)
+//		{
+//			m_moveCounter++;
+//		}
+//	}
+//	else
+//	{
+//		m_shipIsMoving = false;
+//	}
+//
+//}
+
+
+
+
+
+
