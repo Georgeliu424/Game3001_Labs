@@ -69,6 +69,20 @@ void PlayScene::Start()
 	m_pTarget->GetTransform()->position = glm::vec2(600.0f, 300.0f);
 	AddChild(m_pTarget);
 
+	//Add obstacle
+	BuildObstaclePool();
+
+	m_pObstacles[0]->GetTransform()->position = glm::vec2(380.0f, 80.0f);
+	m_pObstacles[0]->SetHeight(50);
+	AddChild(m_pObstacles[0]);
+
+	m_pObstacles[1]->GetTransform()->position = glm::vec2(380.0f, 280.0f);
+	m_pObstacles[1]->SetWidth(100);
+	AddChild(m_pObstacles[1]);
+
+	m_pObstacles[2]->GetTransform()->position = glm::vec2(380.0f, 480.0f);
+	AddChild(m_pObstacles[2]);
+
 
 	// Preload Sounds
 
@@ -148,11 +162,22 @@ void PlayScene::m_buildGrid()
 
 }
 
-
-
-void PlayScene::m_buildObstacles()
+void PlayScene::m_toggleGrid(bool state) const
 {
-	for (int i=0;i<300;++i)
+}
+
+void PlayScene::m_clearNodes()
+{
+}
+
+void PlayScene::m_checkShipLOS(DisplayObject* target_object) const
+{
+}
+
+
+void PlayScene::BuildObstaclePool()
+{
+	for (int i = 0 ; i < 3; ++i)
 	{
 		m_pObstacles.push_back(new Obstacle());
 	}
