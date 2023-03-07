@@ -4,7 +4,7 @@
 #include "TextureManager.h"
 #include "Util.h"
 
-StarShip::StarShip()
+StarShip::StarShip():m_maxSpeed(20.0f),m_turnRate(5.0f),m_accelerationRate(2.0f)
 {
 	TextureManager::Instance().Load("../Assets/textures/ncl_small.png", "starship");
 
@@ -12,22 +12,16 @@ StarShip::StarShip()
 	SetWidth(static_cast<int>(size.x));
 	SetHeight(static_cast<int>(size.y));
 	GetTransform()->position = glm::vec2(0.0f, 0.0f);
-	GetRigidBody()->bounds = glm::vec2(GetWidth(), GetHeight());
 	GetRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	GetRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	GetRigidBody()->isColliding = false;
-	setIsCentered(true);
 	SetType(GameObjectType::AGENT);
 
-	// Starting Motion Properties
-	m_maxSpeed = 20.0f; // a maximum number of pixels moved per frame
-	m_turnRate = 5.0f; // a maximum number of degrees to turn each time-step
-	m_accelerationRate = 4.0f; // a maximum number of pixels to add to the velocity each frame
 
-	SetCurrentDirection(glm::vec2(1.0f, 0.0f)); // Facing Right
-
-	SetLOSDistance(300.0f);
-
+	SetCurrentHeading(0.0f); //current facing angle 
+	SetLOSDistance(400.0f);
+	SetWhiskerAngle(45.0f);
+	SetLOSColour(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)); //default red color 
 }
 
 StarShip::~StarShip()
@@ -38,6 +32,12 @@ void StarShip::Draw()
 	// draw the target
 	TextureManager::Instance().Draw("starship", 
 		GetTransform()->position, static_cast<double>(GetCurrentHeading()), 255, true);
+
+	//draw LOS line
+	Util::DrawLine(GetTransform()->position,
+		GetTransform()->position + GetCurrentDirection() * GetLOSDistance(), GetLOSColour());
+
+
 }
 
 void StarShip::Update()

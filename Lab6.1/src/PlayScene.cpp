@@ -62,9 +62,11 @@ void PlayScene::Start()
 
 	//Game Objects
 	m_pStarShip = new StarShip();
+	m_pStarShip->GetTransform()->position = glm::vec2(150.0f, 300.0f);
 	AddChild(m_pStarShip);
 
 	m_pTarget = new Target();
+	m_pTarget->GetTransform()->position = glm::vec2(600.0f, 300.0f);
 	AddChild(m_pTarget);
 
 
@@ -86,7 +88,7 @@ void PlayScene::GUI_Function()
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("GAME3001 - W2023 - Lab5", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
+	ImGui::Begin("GAME3001 - W2023 - Lab 6.1", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
 
 	ImGui::Separator();
 
@@ -114,8 +116,8 @@ void PlayScene::GUI_Function()
 	
 	if(ImGui::SliderInt2("Starship Position", start_position, 0, 800))
 	{
-		m_pStarShip->GetTransform()->position.x = start_position[0];
-		m_pStarShip->GetTransform()->position.y = start_position[1];
+		m_pStarShip->GetTransform()->position.x = static_cast<float>(start_position[0]);
+		m_pStarShip->GetTransform()->position.y = static_cast<float>(start_position[1]);
 	}
 
 	ImGui::Separator();
@@ -124,8 +126,8 @@ void PlayScene::GUI_Function()
 	
 	if (ImGui::SliderInt2("Target Position", goal_position, 0,800))
 	{
-		m_pTarget->GetTransform()->position.x = goal_position[0];
-		m_pTarget->GetTransform()->position.y = goal_position[1];
+		m_pTarget->GetTransform()->position.x = static_cast<float>(goal_position[0]);
+		m_pTarget->GetTransform()->position.y = static_cast<float>(goal_position[1]);
 	}
 
 	ImGui::End();
