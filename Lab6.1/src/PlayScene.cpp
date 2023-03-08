@@ -83,6 +83,10 @@ void PlayScene::Start()
 	m_pObstacles[2]->GetTransform()->position = glm::vec2(380.0f, 480.0f);
 	AddChild(m_pObstacles[2]);
 
+	//setup the Grid
+	m_isGridEnabled = false;
+	m_buildGrid();
+	m_toggleGrid(m_isGridEnabled);
 
 	// Preload Sounds
 
@@ -109,6 +113,7 @@ void PlayScene::GUI_Function()
 	// Debug Properties
 	if(ImGui::Checkbox("Toggle Grid", &m_isGridEnabled))
 	{
+		m_toggleGrid(m_isGridEnabled);
 
 	}
 
@@ -134,6 +139,13 @@ void PlayScene::GUI_Function()
 		m_pStarShip->GetTransform()->position.y = static_cast<float>(start_position[1]);
 	}
 
+	// allow the ship to rotate
+	static int angle;
+	if (ImGui::SliderInt("Ship Direction",&angle,-360,360))
+	{
+		m_pStarShip->SetCurrentHeading(static_cast<float>(angle));
+	}
+
 	ImGui::Separator();
 
 	// Target Properties
@@ -144,30 +156,84 @@ void PlayScene::GUI_Function()
 		m_pTarget->GetTransform()->position.y = static_cast<float>(goal_position[1]);
 	}
 
+	ImGui::Separator();
+	// Add obstacle position control
+	for (unsigned i = 0; i < m_pObstacles.size(); ++i)
+	{
+		int obstacle_Position[] = { static_cast<int>(m_pObstacles[i]->GetTransform()->position.x),
+		static_cast<int>(m_pObstacles[i]->GetTransform()->position.y) };
+		std::string label = "Obstacle" + std::to_string(i + 1) + "Position";
+		if (ImGui::SliderInt2(label.c_str(),obstacle_Position,0,800))
+		{
+			m_pObstacles[i]->GetTransform()->position.x = static_cast<float>(obstacle_Position[0]);
+			m_pObstacles[i]->GetTransform()->position.y = static_cast<float>(obstacle_Position[1]);
+			m_buildGrid();
+		}
+	}
 	ImGui::End();
 }
 
 void PlayScene::m_buildGrid()
 {
-	const auto tile_size = Config::TILE_SIZE;
+	constexpr  auto tile_size = Config::TILE_SIZE;//Tile size alias
+	constexpr auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
 
-	// layout a grid of tiles
+	m_clearNodes(); //We will need to clear the nodes because we will rebuild our grid every time we move an obstacle
+
+	// layout a grid of path_nodes
 	for (int row = 0; row < Config::ROW_NUM; ++row)
 	{
 		for (int col = 0; col < Config::COL_NUM; ++col)
 		{
-			
+			auto path_node = new PathNode();
+			//node placement 
+			path_node->GetTransform()->position = glm::vec2(static_cast<float>(col) * tile_size + offset.x,
+				static_cast<float>(row) * tile_size + offset.y);
+
+			//only show the grid where there are no obstacles
+			bool keep_node = true;
+			for (const auto obstacle : m_pObstacles)
+			{
+				//determine which path_node to keep
+				if (CollisionManager::AABBCheck(path_node, obstacle))
+				{
+					keep_node = false;
+				}
+			}
+			if (keep_node)
+			{
+				AddChild(path_node);
+				m_pGrid.push_back(path_node);
+			}
+			else
+			{
+				delete path_node;
+			}
 		}
 	}
+	m_toggleGrid(m_isGridEnabled);
 
 }
 
-void PlayScene::m_toggleGrid(bool state) const
+void PlayScene::m_toggleGrid(const bool state) const
 {
+	for (const auto path_node : m_pGrid)
+	{
+		path_node->SetVisible(state);
+		
+	}
 }
 
 void PlayScene::m_clearNodes()
 {
+	m_pGrid.clear();
+	for (const auto display_object : GetDisplayList())
+	{
+		if (display_object->GetType() == GameObjectType::PATH_NODE)
+		{
+			RemoveChild(display_object);
+		}
+	}
 }
 
 void PlayScene::m_checkShipLOS(DisplayObject* target_object) const
