@@ -26,6 +26,7 @@ void PlayScene::Draw()
 void PlayScene::Update()
 {
 	UpdateDisplayList();
+	m_checkShipLOS(m_pTarget);
 }
 
 void PlayScene::Clean()
@@ -238,6 +239,32 @@ void PlayScene::m_clearNodes()
 
 void PlayScene::m_checkShipLOS(DisplayObject* target_object) const
 {
+	m_pStarShip->SetHasLOS(false);//default state - No LOS
+
+	//if ship to target distance is less than or equal to the LOS distance, we're in the range
+	const auto ship_to_range = Util::GetClosestEdge(m_pStarShip -> GetTransform() ->position, target_object);
+	if (ship_to_range<=m_pStarShip->GetLOSDistance())
+	{
+		std::vector<DisplayObject*> contact_list;
+		for (auto display_object : GetDisplayList())
+		{
+			if (display_object -> GetType() == GameObjectType::PATH_NODE){continue;} // ignore these
+			if ((display_object->GetType() != m_pStarShip->GetType()) && 
+				(display_object->GetType() != target_object->GetType())) 
+			{
+				// check if another display_object is closer to the startship than the target
+				const auto ship_to_object_distance = Util::GetClosestEdge(m_pStarShip->GetTransform()->position, display_object);
+				if (ship_to_object_distance <= ship_to_range ) 
+				{
+					contact_list.push_back(display_object);
+				}
+			}
+		}
+		const auto has_LOS = CollisionManager::LOSCheck(m_pStarShip,
+			m_pStarShip->GetTransform()->position + m_pStarShip->GetCurrentDirection() * m_pStarShip->GetLOSDistance(),
+			contact_list, target_object);
+		m_pStarShip->SetHasLOS(has_LOS);
+	}
 }
 
 
