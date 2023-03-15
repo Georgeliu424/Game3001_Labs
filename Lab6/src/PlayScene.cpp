@@ -74,17 +74,6 @@ void PlayScene::Start()
 	//Add obstacle
 	BuildObstaclePool();
 
-	m_pObstacles[0]->GetTransform()->position = glm::vec2(380.0f, 80.0f);
-	m_pObstacles[0]->SetHeight(50);
-	AddChild(m_pObstacles[0]);
-
-	m_pObstacles[1]->GetTransform()->position = glm::vec2(380.0f, 280.0f);
-	m_pObstacles[1]->SetWidth(100);
-	AddChild(m_pObstacles[1]);
-
-	m_pObstacles[2]->GetTransform()->position = glm::vec2(380.0f, 480.0f);
-	AddChild(m_pObstacles[2]);
-
 	//setup the Grid
 	m_isGridEnabled = false;
 	m_buildGrid();
@@ -177,7 +166,7 @@ void PlayScene::GUI_Function()
 
 void PlayScene::BuildObstaclePool()
 {
-	std::ifstream infile(".../Assets/data/obstacles.txt");
+	std::ifstream infile("../Assets/data/obstacles.txt");
 	while (!infile.eof())
 	{
 		std::cout << "Obstacle" << std::endl;
