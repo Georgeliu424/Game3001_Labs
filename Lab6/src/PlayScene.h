@@ -49,8 +49,8 @@ private:
 	void m_setPathNodeLOSDistance(int distance) const;
 
 	//LOS Variables(fields)
-	LOSMode m_LOSMode();
-	int m_pathNodeLOSDistance();
+	LOSMode m_LOSMode{};
+	int m_pathNodeLOSDistance;
 
 	// Debugging Variables
 	bool m_bDebugView;

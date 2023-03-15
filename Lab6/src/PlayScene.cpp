@@ -21,6 +21,15 @@ void PlayScene::Draw()
 {
 	DrawDisplayList();
 
+	if (m_isGridEnabled)
+	{
+		for (const auto obstacle : m_pObstacles)
+		{
+			Util::DrawRect(obstacle->GetTransform()->position - glm::vec2(obstacle->GetWidth() * 0.5f,
+				obstacle->GetHeight() * 0.5f), obstacle->GetWidth(), obstacle->GetHeight());
+		}
+	}
+
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
 
@@ -28,6 +37,18 @@ void PlayScene::Update()
 {
 	UpdateDisplayList();
 	m_checkAgentLOS(m_pStarShip, m_pTarget);
+	switch (m_LOSMode)
+	{
+	case LOSMode::TARGET:
+		m_checkAllNodesWithTarget(m_pTarget);
+		break;
+	case LOSMode::SHIP:
+		m_checkAllNodesWithTarget(m_pStarShip);
+		break;
+	case LOSMode::BOTH:
+		m_checkAllNodesWithBoth();
+		break;
+	}
 }
 
 void PlayScene::Clean()
@@ -61,6 +82,11 @@ void PlayScene::Start()
 {
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
+
+	//Setup a few more fields
+	m_LOSMode = LOSMode::TARGET;
+	m_pathNodeLOSDistance = 1000;
+	m_setPathNodeLOSDistance(m_pathNodeLOSDistance);
 
 	//Game Objects
 	m_pStarShip = new StarShip();
@@ -96,43 +122,48 @@ void PlayScene::GUI_Function()
 
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
-	
-	ImGui::Begin("GAME3001 - W2023 - Lab 6.1", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
+
+	ImGui::Begin("GAME3001 - W2023 - Lab 6", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar);
 
 	ImGui::Separator();
 
 	// Debug Properties
-	if(ImGui::Checkbox("Toggle Grid", &m_isGridEnabled))
+	if (ImGui::Checkbox("Toggle Grid", &m_isGridEnabled))
 	{
 		m_toggleGrid(m_isGridEnabled);
-
 	}
 
 	ImGui::Separator();
 
-	//static position variables 
-	static int start_position[2] = {
-		static_cast<int>(m_pStarShip->GetTransform()->position.x),
-		static_cast<int>(m_pStarShip->GetTransform()->position.y) };
+	static int LOS_Mode = static_cast<int>(m_LOSMode);
+	ImGui::Text("Path Node LOS");
+	ImGui::RadioButton("Target", &LOS_Mode, static_cast<int>(LOSMode::TARGET)); ImGui::SameLine();
+	ImGui::RadioButton("StarShip", &LOS_Mode, static_cast<int>(LOSMode::SHIP));
+	ImGui::RadioButton("Both Target & StarShip", &LOS_Mode, static_cast<int>(LOSMode::BOTH));
 
-	static int goal_position[2] = {
-		static_cast<int>(m_pTarget->GetTransform()->position.x),
-		static_cast<int>(m_pTarget->GetTransform()->position.y) };
+	m_LOSMode = static_cast<LOSMode>(LOS_Mode);
 
-	
+	ImGui::Separator();
+
+	if (ImGui::SliderInt("Path Node LOS Distance", &m_pathNodeLOSDistance, 0, 1000))
+	{
+		m_setPathNodeLOSDistance(m_pathNodeLOSDistance);
+	}
+
 	ImGui::Separator();
 
 	// StarShip Properties
-	
-	if(ImGui::SliderInt2("Starship Position", start_position, 0, 800))
+	static int shipPosition[] = { static_cast<int>(m_pStarShip->GetTransform()->position.x),
+		static_cast<int>(m_pStarShip->GetTransform()->position.y) };
+	if (ImGui::SliderInt2("Ship Position", shipPosition, 0, 800))
 	{
-		m_pStarShip->GetTransform()->position.x = static_cast<float>(start_position[0]);
-		m_pStarShip->GetTransform()->position.y = static_cast<float>(start_position[1]);
+		m_pStarShip->GetTransform()->position.x = static_cast<float>(shipPosition[0]);
+		m_pStarShip->GetTransform()->position.y = static_cast<float>(shipPosition[1]);
 	}
 
 	// allow the ship to rotate
 	static int angle;
-	if (ImGui::SliderInt("Ship Direction",&angle,-360,360))
+	if (ImGui::SliderInt("Ship Direction", &angle, -360, 360))
 	{
 		m_pStarShip->SetCurrentHeading(static_cast<float>(angle));
 	}
@@ -140,27 +171,31 @@ void PlayScene::GUI_Function()
 	ImGui::Separator();
 
 	// Target Properties
-	
-	if (ImGui::SliderInt2("Target Position", goal_position, 0,800))
+	static int targetPosition[] = { static_cast<int>(m_pTarget->GetTransform()->position.x),
+		static_cast<int>(m_pTarget->GetTransform()->position.y) };
+	if (ImGui::SliderInt2("Target Position", targetPosition, 0, 800))
 	{
-		m_pTarget->GetTransform()->position.x = static_cast<float>(goal_position[0]);
-		m_pTarget->GetTransform()->position.y = static_cast<float>(goal_position[1]);
+		m_pTarget->GetTransform()->position.x = static_cast<float>(targetPosition[0]);
+		m_pTarget->GetTransform()->position.y = static_cast<float>(targetPosition[1]);
 	}
 
 	ImGui::Separator();
-	// Add obstacle position control
+
+	// Add Obstacle position control for each obstacle
 	for (unsigned i = 0; i < m_pObstacles.size(); ++i)
 	{
-		int obstacle_Position[] = { static_cast<int>(m_pObstacles[i]->GetTransform()->position.x),
+		int obstaclePosition[] = { static_cast<int>(m_pObstacles[i]->GetTransform()->position.x),
 		static_cast<int>(m_pObstacles[i]->GetTransform()->position.y) };
-		std::string label = "Obstacle" + std::to_string(i + 1) + "Position";
-		if (ImGui::SliderInt2(label.c_str(),obstacle_Position,0,800))
+		std::string label = "Obstacle " + std::to_string(i + 1) + " Position";
+		if (ImGui::SliderInt2(label.c_str(), obstaclePosition, 0, 800))
 		{
-			m_pObstacles[i]->GetTransform()->position.x = static_cast<float>(obstacle_Position[0]);
-			m_pObstacles[i]->GetTransform()->position.y = static_cast<float>(obstacle_Position[1]);
+			m_pObstacles[i]->GetTransform()->position.x = static_cast<float>(obstaclePosition[0]);
+			m_pObstacles[i]->GetTransform()->position.y = static_cast<float>(obstaclePosition[1]);
 			m_buildGrid();
 		}
 	}
+
+
 	ImGui::End();
 }
 

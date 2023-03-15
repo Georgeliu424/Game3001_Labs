@@ -6,7 +6,7 @@ enum class LOSMode
 {
 	TARGET,
 	SHIP,
-	BoTH
+	BOTH
 };
 
 #endif
