@@ -285,12 +285,22 @@ void PlayScene::m_checkAllNodesWithTarget(DisplayObject* target_object) const
 	}
 }
 
-void PlayScene::m_checkAllNodesWithBoth()
+void PlayScene::m_checkAllNodesWithBoth() const
 {
+	for (const auto path_node : m_pGrid)
+	{
+		const bool LOSWithStartship = m_checkPathNodeLOS(path_node, m_pStarShip);
+		const bool LOSWithTarget = m_checkPathNodeLOS(path_node, m_pTarget);
+		path_node->SetHasLOS(LOSWithStartship && LOSWithTarget, glm::vec4(0,1,1,1));
+	}
 }
 
-void PlayScene::m_setPathNodeLOSDistance(int distance)
+void PlayScene::m_setPathNodeLOSDistance(const int distance) const
 {
+	for (const auto path_node : m_pGrid)
+	{
+		path_node->SetLOSDistance(static_cast<float>(distance));
+	}
 }
 
 
