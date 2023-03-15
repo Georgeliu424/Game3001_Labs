@@ -239,8 +239,12 @@ void PlayScene::m_buildGrid()
 			bool keep_node = true;
 			for (const auto obstacle : m_pObstacles)
 			{
+				auto obstacleBuffer = new Obstacle();
+				obstacleBuffer->GetTransform()->position = obstacle->GetTransform()->position;
+				obstacleBuffer->SetWidth(obstacle->GetWidth() + 40);
+				obstacleBuffer->SetHeight(obstacle->GetHeight() + 40);
 				//determine which path_node to keep
-				if (CollisionManager::AABBCheck(path_node, obstacle))
+				if (CollisionManager::AABBCheck(path_node, obstacleBuffer))
 				{
 					keep_node = false;
 				}
