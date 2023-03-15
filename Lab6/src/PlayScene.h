@@ -2,6 +2,7 @@
 #ifndef __PLAY_SCENE__
 #define __PLAY_SCENE__
 
+#include "LOSMode.h"
 #include "Scene.h"
 #include "Target.h"
 #include "StarShip.h"
@@ -50,7 +51,8 @@ private:
 	void m_setPathNodeLOSDistance(int distance);
 
 	//LOS Variables(fields)
-
+	LOSMode m_LOSMode();
+	int m_pathNodeLOSDistance();
 
 	// Debugging Variables
 	bool m_bDebugView;
