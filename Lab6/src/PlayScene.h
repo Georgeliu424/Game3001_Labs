@@ -25,17 +25,13 @@ private:
 	void GUI_Function();
 	std::string m_guiTitle;
 	glm::vec2 m_mousePosition;
+	bool m_isGridEnabled;
 
 	// Game Objects for the Scene
 	Target* m_pTarget;
 	StarShip* m_pStarShip;
-
-	// Debugging Variables
-	bool m_bDebugView;
-	bool m_isGridEnabled;
-	
-	// obstacle list
 	std::vector<Obstacle*> m_pObstacles;
+
 	void BuildObstaclePool();
 
 	//Division scheme
@@ -46,6 +42,18 @@ private:
 
 	//LOS Functions
 	void m_checkShipLOS(DisplayObject*target_object) const;
+
+	bool m_checkAgentLOS(Agent * agent,DisplayObject*target_object);
+	bool m_checkPathNodeLOS(PathNode* path_node, DisplayObject* target_object);
+	void m_checkAllNodesWithTarget(DisplayObject* target_object);
+	void m_checkAllNodesWithBoth();
+	void m_setPathNodeLOSDistance(int distance);
+
+	//LOS Variables(fields)
+
+
+	// Debugging Variables
+	bool m_bDebugView;
 
 };
 
