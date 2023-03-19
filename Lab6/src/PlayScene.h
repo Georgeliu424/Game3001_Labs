@@ -27,6 +27,7 @@ private:
 	std::string m_guiTitle;
 	glm::vec2 m_mousePosition;
 	bool m_isGridEnabled;
+	bool m_isShortestPathEnable = false;
 
 	// Game Objects for the Scene
 	Target* m_pTarget;
@@ -54,6 +55,9 @@ private:
 
 	// Debugging Variables
 	bool m_bDebugView;
+	// Ship to Target Path
+	PathNode* shortestNode;
+	glm::vec2 ShortestpathNode;
 
 };
 
