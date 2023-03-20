@@ -29,6 +29,7 @@ void PlayScene::Draw()
 				obstacle->GetHeight() * 0.5f), obstacle->GetWidth(), obstacle->GetHeight());
 		}
 	}
+	
 
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
@@ -89,7 +90,6 @@ void PlayScene::Start()
 	m_setPathNodeLOSDistance(m_pathNodeLOSDistance);
 
 	//Game Objects
-	// Add Game Objects
 	m_pTarget = new Target();
 	m_pTarget->GetTransform()->position = glm::vec2(550.0f, 300.0f);
 	AddChild(m_pTarget, 2);
@@ -143,7 +143,14 @@ void PlayScene::GUI_Function()
 	ImGui::RadioButton("StarShip", &LOS_Mode, static_cast<int>(LOSMode::SHIP));
 	ImGui::RadioButton("Both Target & StarShip", &LOS_Mode, static_cast<int>(LOSMode::BOTH));
 
+	if (ImGui::Checkbox("Toggle Path",&m_isPathEnabled))
+	{
+		m_toggleGrid(m_isPathEnabled);
+	}
+
+
 	m_LOSMode = static_cast<LOSMode>(LOS_Mode);
+
 
 	ImGui::Separator();
 
@@ -345,9 +352,31 @@ void PlayScene::m_checkAllNodesWithBoth() const
 		const bool LOSWithTarget = m_checkPathNodeLOS(path_node, m_pTarget);
 		path_node->SetHasLOS(LOSWithStartship && LOSWithTarget, glm::vec4(0,1,1,1));
 
+	}
+
+
+}
+
+void PlayScene::m_Nodeconnection(glm::vec2 pathNode) const
+{
+
+	for (const auto path_node : m_pGrid)
+	{
+		const bool LOSWithStartship = m_checkPathNodeLOS(path_node, m_pStarShip);
+		const bool LOSWithTarget = m_checkPathNodeLOS(path_node, m_pTarget);
+		path_node->SetHasLOS(LOSWithStartship && LOSWithTarget, glm::vec4(0, 1, 1, 1));
+
+
+		if (LOSWithStartship&&LOSWithTarget)
+		{
+			Util::DrawLine(m_pStarShip->GetTransform()->position, pathNode, glm::vec4(1, 0, 1, 1));
+			Util::DrawLine(pathNode,m_pTarget->GetTransform()->position, glm::vec4(1, 0, 1, 1));
 		}
 
 
+	}
+	
+	
 }
 
 

@@ -27,7 +27,7 @@ private:
 	std::string m_guiTitle;
 	glm::vec2 m_mousePosition;
 	bool m_isGridEnabled;
-	bool m_isShortestPathEnable = false;
+	bool m_isPathEnabled = false;
 
 	// Game Objects for the Scene
 	Target* m_pTarget;
@@ -48,6 +48,7 @@ private:
 	void m_checkAllNodesWithTarget(DisplayObject* target_object) const;
 	void m_checkAllNodesWithBoth() const;
 	void m_setPathNodeLOSDistance(int distance) const;
+	void m_Nodeconnection(glm::vec2 pathNode)const;
 
 	//LOS Variables(fields)
 	LOSMode m_LOSMode{};
@@ -55,9 +56,7 @@ private:
 
 	// Debugging Variables
 	bool m_bDebugView;
-	// Ship to Target Path
-	PathNode* shortestNode;
-	glm::vec2 ShortestpathNode;
+
 
 };
 
