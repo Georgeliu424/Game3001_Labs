@@ -82,7 +82,7 @@ private:
 	float m_whiskerAngle;
 
 	//New for Lab 7.1
-	ActionState m_state;
+	ActionState m_actionState;
 
 };
 
