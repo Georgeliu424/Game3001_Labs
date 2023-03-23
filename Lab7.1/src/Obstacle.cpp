@@ -6,7 +6,7 @@
 
 Obstacle::Obstacle()
 {
-	TextureManager::Instance().Load("../Assets/textures/obstacle.png", "obstacle");
+	TextureManager::Instance().Load("../Assets/textures/nebula_cloud.png", "obstacle");
 
 	const auto size = TextureManager::Instance().GetTextureSize("obstacle");
 	SetWidth(static_cast<int>(size.x));
@@ -25,7 +25,7 @@ Obstacle::~Obstacle()
 
 void Obstacle::Draw()
 {
-	TextureManager::Instance().Draw("obstacle", GetTransform()->position, this, 0, 255, true);
+	TextureManager::Instance().Draw("obstacle", GetTransform()->position, this, 0, 200, true);
 }
 
 void Obstacle::Update()
