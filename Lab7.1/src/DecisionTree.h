@@ -35,14 +35,14 @@ public:
 	//life cycle Functions
 	void Display()const;
 	void Update()const;
-	void Clean()const;
+	void Clean();
 
 	// Main Public Method
 	void MakeDecision()const;
 private:
 	//private data members
 	Agent* m_agent{};
-	LOSCondition* M_LOSNode{};
+	LOSCondition* m_LOSNode{};
 	RadiusCondition* m_RadiusNode{};
 	CloseCombatCondition* m_CloseCombatNode{};
 	//Tree Node list
