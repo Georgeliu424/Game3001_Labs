@@ -22,13 +22,13 @@ public:
 	~DecisionTree();
 
 	// getters and setters
-	Agent* GetAgent() const;
+	[[nodiscard]] Agent* GetAgent() const;
 	void SetAgent(Agent* agent);
 
 	// ConditionNode Getters
-	LOSCondition* GetLOSNode() const;
-	RadiusCondition* GetRadiusNode() const;
-	CloseCombatCondition* GetCloseCombatNode() const;
+	[[nodiscard]] LOSCondition* GetLOSNode() const;
+	[[nodiscard]] RadiusCondition* GetRadiusNode() const;
+	[[nodiscard]] CloseCombatCondition* GetCloseCombatNode() const;
 
 	// Public Utility / Convenience functions
 	TreeNode* AddNode(TreeNode* parent, TreeNode* child_node, TreeNodeType type);
@@ -49,9 +49,6 @@ private:
 
 	// Tree Node List
 	std::vector<TreeNode*> m_treeNodeList;
-
-	// Private Methods
-	void m_buildTree();
 };
 
 #endif /* defined (__DECISION_TREE__) */

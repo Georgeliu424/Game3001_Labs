@@ -51,8 +51,7 @@ void PlayScene::Update()
 		break;
 	}
 
-	// Make a Decision
-	m_decisionTree->MakeDecision();
+	
 }
 
 void PlayScene::Clean()
@@ -83,7 +82,7 @@ void PlayScene::HandleEvents()
 void PlayScene::Start()
 {
 	// Set GUI Title
-	m_guiTitle = "Lab 7 - Part 1";
+	m_guiTitle = "Lab 7 - Part 2";
 
 	// Setup a few more fields
 	m_LOSMode = LOSMode::TARGET;
@@ -110,10 +109,7 @@ void PlayScene::Start()
 	m_buildGrid();
 	m_toggleGrid(m_isGridEnabled);
 
-	// Create Decision Tree
-	m_decisionTree = new DecisionTree(m_pStarShip); // using our overloaded constructor
-	m_decisionTree->Display(); // optional step
-	m_decisionTree->MakeDecision(); // default = patrol
+
 
 	// Preload Sounds
 
@@ -138,7 +134,7 @@ void PlayScene::GUI_Function()
 	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
 	//ImGui::ShowDemoWindow();
 	
-	ImGui::Begin("GAME3001 - W2023 - Lab 6.2", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
+	ImGui::Begin(m_guiTitle.c_str(), NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar );
 
 	ImGui::Separator();
 

@@ -63,8 +63,7 @@ private:
 	// Debugging Variables
 	bool m_bDebugView;
 
-	// Decision Tree
-	DecisionTree* m_decisionTree;
+	
 };
 
 #endif /* defined (__PLAY_SCENE__) */
