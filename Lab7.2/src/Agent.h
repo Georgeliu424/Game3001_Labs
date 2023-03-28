@@ -5,6 +5,7 @@
 #include <glm/vec4.hpp>
 #include "NavigationObject.h"
 #include "ActionState.h"
+#include "Obstacle.h"
 
 class Agent : public NavigationObject
 {
@@ -13,9 +14,9 @@ public:
 	~Agent();
 
 	// Inherited via GameObject
-	void Draw() override = 0;
-	void Update() override = 0;
-	void Clean() override = 0;
+	void Draw() override;
+	void Update() override;
+	void Clean() override;
 
 	// getters
 	[[nodiscard]] glm::vec2 GetTargetPosition() const;
@@ -34,10 +35,6 @@ public:
 	bool* GetCollisionWhiskers(); // Returns the entire array
 	[[nodiscard]] glm::vec4 GetLineColour(int index) const;
 	[[nodiscard]] float GetWhiskerAngle() const;
-
-	// New for Lab 7.1
-	[[nodiscard]] ActionState GetActionState() const;
-	void SetActionState(ActionState state);
 
 	// setters
 	void SetTargetPosition(glm::vec2 new_position);
@@ -59,6 +56,20 @@ public:
 
 	// utility function
 	void UpdateWhiskers(float angle);
+
+	// New for Lab 7.1
+	[[nodiscard]] ActionState GetActionState() const;
+	void SetActionState(ActionState state);
+
+	//New for Lab 7.2
+	//Utility function
+	bool CheckAgentLOSToTarget(DisplayObject* target_object, const std::vector<Obstacle*>& obstacles);
+	//virtual functions
+	virtual void Attack() {}
+	virtual void MoveToLOS() {}
+	virtual void MoveToPlayer() {}
+	virtual void MoveToRange() {}
+	virtual void Patrol() {}
 
 private:
 	void ChangeDirection();
