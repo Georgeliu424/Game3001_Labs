@@ -44,6 +44,31 @@ CloseCombatCondition* DecisionTree::GetCloseCombatNode() const
 	return m_CloseCombatNode;
 }
 
+std::vector<TreeNode*>& DecisionTree::GetTree()
+{
+	return m_treeNodeList;
+}
+
+void DecisionTree::SetLOSNode(LOSCondition* node)
+{
+	m_LOSNode = node;
+}
+
+void DecisionTree::SetRadiusNode(RadiusCondition* node)
+{
+	m_RadiusNode = node;
+}
+
+void DecisionTree::SetCloseCombatNode(CloseCombatCondition* node)
+{
+	m_CloseCombatNode = node;
+}
+
+void DecisionTree::SetRangedCombatNode(RangedCombatCondition* node)
+{
+	m_RangedCombatNode = node;
+}
+
 TreeNode* DecisionTree::AddNode(TreeNode* parent, TreeNode* child_node, const TreeNodeType type)
 {
 	switch(type)
