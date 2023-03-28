@@ -38,16 +38,14 @@ void PlayScene::Update()
 {
 	UpdateDisplayList();
 
-	//TODO: Replace this with CheckAgentLOSToTarget from Agent class 
-	m_checkAgentLOS(m_pStarShip, m_pTarget);
-	//m_pStarship->GetTree()->GetLOSNode()->SetLOS(m_pStarship->CheckAgentLOSToTarget(m_pTarget, m_pObstacles));
+	m_pStarship->GetTree()->GetLOSNode()->SetLOS(m_pStarship->CheckAgentLOSToTarget(m_pTarget, m_pObstacles));
 	switch(m_LOSMode)
 	{
 	case LOSMode::TARGET:
 		m_checkAllNodesWithTarget(m_pTarget);
 		break;
 	case LOSMode::SHIP:
-		m_checkAllNodesWithTarget(m_pStarShip);
+		m_checkAllNodesWithTarget(m_pStarship);
 		break;
 	case LOSMode::BOTH:
 		m_checkAllNodesWithBoth();
@@ -100,9 +98,10 @@ void PlayScene::Start()
 	m_pTarget->GetTransform()->position = glm::vec2(500.0f, 300.0f);
 	AddChild(m_pTarget, 2);
 
-	m_pStarShip = new StarShip();
-	m_pStarShip->GetTransform()->position = glm::vec2(400.0f, 40.0f);
-	AddChild(m_pStarShip, 2);
+	m_pStarship = new CloseCombatEnemy();
+	//m_pStarship = new RangedCombatEnemy();
+	m_pStarship->GetTransform()->position = glm::vec2(400.0f, 40.0f);
+	AddChild(m_pStarship, 2);
 
 	// Add Obstacles
 	BuildObstaclePool();
@@ -167,19 +166,19 @@ void PlayScene::GUI_Function()
 	ImGui::Separator();
 
 	// StarShip Properties
-	static int shipPosition[] = { static_cast<int>(m_pStarShip->GetTransform()->position.x),
-		static_cast<int>(m_pStarShip->GetTransform()->position.y) };
+	static int shipPosition[] = { static_cast<int>(m_pStarship->GetTransform()->position.x),
+		static_cast<int>(m_pStarship->GetTransform()->position.y) };
 	if(ImGui::SliderInt2("Ship Position", shipPosition, 0, 800))
 	{
-		m_pStarShip->GetTransform()->position.x = static_cast<float>(shipPosition[0]);
-		m_pStarShip->GetTransform()->position.y = static_cast<float>(shipPosition[1]);
+		m_pStarship->GetTransform()->position.x = static_cast<float>(shipPosition[0]);
+		m_pStarship->GetTransform()->position.y = static_cast<float>(shipPosition[1]);
 	}
 
 	// allow the ship to rotate
 	static int angle;
 	if(ImGui::SliderInt("Ship Direction", &angle, -360, 360))
 	{
-		m_pStarShip->SetCurrentHeading(static_cast<float>(angle));
+		m_pStarship->SetCurrentHeading(static_cast<float>(angle));
 	}
 
 	ImGui::Separator();
@@ -353,7 +352,7 @@ void PlayScene::m_checkAllNodesWithBoth() const
 {
 	for (const auto path_node : m_pGrid)
 	{
-		const bool LOSWithStarShip = m_checkPathNodeLOS(path_node, m_pStarShip);
+		const bool LOSWithStarShip = m_checkPathNodeLOS(path_node, m_pStarship);
 		const bool LOSWithTarget = m_checkPathNodeLOS(path_node, m_pTarget);
 		path_node->SetHasLOS(LOSWithStarShip && LOSWithTarget, glm::vec4(0, 1, 1, 1));
 	}
