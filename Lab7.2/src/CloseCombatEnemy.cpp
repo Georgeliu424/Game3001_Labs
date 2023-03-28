@@ -4,9 +4,14 @@
 #include "TextureManager.h"
 #include "Util.h"
 #include "EventManager.h"
+#include "ActionNode.h"
+#include "AttackAction.h"
+#include "MoveToPlayerAction.h"
+#include "PatrolAction.h"
+#include "MoveToLOSAction.h"
 
 CloseCombatEnemy::CloseCombatEnemy() : m_maxSpeed(20.0f),
-m_turnRate(5.0f), m_accelerationRate(2.0f), m_startPosition(glm::vec2(300.0f, 500.0f))
+                                       m_turnRate(5.0f), m_accelerationRate(2.0f), m_startPosition(glm::vec2(300.0f, 500.0f))
 {
 	TextureManager::Instance().Load("../Assets/textures/d7_small.png", "close_combat_enemy");
 
@@ -192,6 +197,39 @@ DecisionTree* CloseCombatEnemy::GetTree() const
 
 void CloseCombatEnemy::m_buildTree()
 {
+	// Conditions
+
+	// Create and Add the Root Node
+	m_tree->SetLOSNode(new LOSCondition());
+	m_tree->GetTree().push_back(m_tree->GetLOSNode());
+
+	m_tree->SetRadiusNode(new RadiusCondition());
+	m_tree->AddNode(m_tree->GetLOSNode(), m_tree->GetRadiusNode(), TreeNodeType::LEFT_TREE_NODE);
+	m_tree->GetTree().push_back(m_tree->GetRadiusNode());
+
+	m_tree->SetCloseCombatNode(new CloseCombatCondition());
+	m_tree->AddNode(m_tree->GetLOSNode(), m_tree->GetCloseCombatNode(), TreeNodeType::RIGHT_TREE_NODE);
+	m_tree->GetTree().push_back(m_tree->GetCloseCombatNode());
+
+	// Actions
+
+	// Left Sub-Tree
+	TreeNode* patrolNode = m_tree->AddNode(m_tree->GetRadiusNode(), new PatrolAction(), TreeNodeType::LEFT_TREE_NODE);
+	dynamic_cast<ActionNode*>(patrolNode)->SetAgent(this);
+	m_tree->GetTree().push_back(patrolNode);
+
+	TreeNode* moveToLOSNode = m_tree->AddNode(m_tree->GetRadiusNode(), new MoveToLOSAction(), TreeNodeType::RIGHT_TREE_NODE);
+	dynamic_cast<ActionNode*>(moveToLOSNode)->SetAgent(this);
+	m_tree->GetTree().push_back(moveToLOSNode);
+
+	// Right Sub-Tree
+	TreeNode* moveToPlayerNode = m_tree->AddNode(m_tree->GetCloseCombatNode(), new MoveToPlayerAction(), TreeNodeType::LEFT_TREE_NODE);
+	dynamic_cast<ActionNode*>(moveToPlayerNode)->SetAgent(this);
+	m_tree->GetTree().push_back(moveToPlayerNode);
+
+	TreeNode* attackNode = m_tree->AddNode(m_tree->GetCloseCombatNode(), new AttackAction(), TreeNodeType::RIGHT_TREE_NODE);
+	dynamic_cast<ActionNode*>(attackNode)->SetAgent(this);
+	m_tree->GetTree().push_back(attackNode);
 }
 
 void CloseCombatEnemy::m_move()

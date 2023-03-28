@@ -21,7 +21,7 @@ public:
 
 	// getters and setters (accessors and mutators)
 	[[nodiscard]] float GetMaxSpeed() const;
-	float GetTurnRate() const;
+	[[nodiscard]] float GetTurnRate() const;
 	[[nodiscard]] float GetAccelerationRate() const;
 	[[nodiscard]] glm::vec2 GetDesiredVelocity() const;
 
