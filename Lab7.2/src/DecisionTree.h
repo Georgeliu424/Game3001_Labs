@@ -30,6 +30,7 @@ public:
 	[[nodiscard]] LOSCondition* GetLOSNode() const;
 	[[nodiscard]] RadiusCondition* GetRadiusNode() const;
 	[[nodiscard]] CloseCombatCondition* GetCloseCombatNode() const;
+	[[nodiscard]] RangedCombatCondition* GetRangedCombatNode() const;
 
 	//New for Lab 7.2
 	std::vector<TreeNode*>& GetTree();
