@@ -14,9 +14,9 @@ public:
 	~Agent();
 
 	// Inherited via GameObject
-	void Draw() override;
-	void Update() override;
-	void Clean() override;
+	void Draw() override =0;
+	void Update() override =0;
+	void Clean() override =0;
 
 	// getters
 	[[nodiscard]] glm::vec2 GetTargetPosition() const;
