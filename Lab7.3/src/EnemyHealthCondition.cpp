@@ -1,20 +1,21 @@
-#include "CloseCombatCondition.h"
+#include "EnemyHealthCondition.h"
 
-CloseCombatCondition::CloseCombatCondition(const bool within_combat_range)
+EnemyHealthCondition::EnemyHealthCondition(Agent *agent,const bool healthy)
+	:ConditionNode(agent)
 {
-	m_name = "Close Combat Condition";
-	SetIsWithinCombatRange(within_combat_range);
+	m_name = "Enemy Health Condition";
+	SetHealth(healthy); 
 }
 
-CloseCombatCondition::~CloseCombatCondition()
+EnemyHealthCondition::~EnemyHealthCondition()
 = default;
 
-void CloseCombatCondition::SetIsWithinCombatRange(const bool state)
+void EnemyHealthCondition::SetHealth(const bool state)
 {
-	m_isWithinCombatRange = state;
+	m_isHealthy = state;
 }
 
-bool CloseCombatCondition::Condition()
+bool EnemyHealthCondition::Condition()
 {
-	return m_isWithinCombatRange;
+	return m_isHealthy;
 }

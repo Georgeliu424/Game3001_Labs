@@ -1,20 +1,21 @@
 #pragma once
-#ifndef __CLOSE_COMBAT_CONDITION__
-#define __CLOSE_COMBAT_CONDITION__
+#ifndef __PLAYER_DETECTED_CONDITION__
+#define __PLAYER_DETECTED_CONDITION__
 
 #include "ConditionNode.h"
 
-class CloseCombatCondition : public ConditionNode
+class PlayerDetectedCondition : public ConditionNode
 {
-public:
-	CloseCombatCondition(bool within_combat_range = false);
-	virtual ~CloseCombatCondition();
+public: 
+	PlayerDetectedCondition(Agent * agent ,bool detected = false);
+	virtual ~PlayerDetectedCondition();
 
 	// Setter
-	void SetIsWithinCombatRange(bool state);
+	[[nodiscard]] bool GetDetected() const;
+	void SetDetected(bool state);
 
 	virtual bool Condition() override;
 private:
-	bool m_isWithinCombatRange{};
+	bool m_isDetected{};
 };
-#endif /* defined (__CLOSE_COMBAT_CONDITION__) */
+#endif /* defined (__PLAYER_DETECTED_CONDITION__) */

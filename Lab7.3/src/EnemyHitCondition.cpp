@@ -1,20 +1,21 @@
-#include "CloseCombatCondition.h"
+#include "EnemyHitCondition.h"
 
-CloseCombatCondition::CloseCombatCondition(const bool within_combat_range)
+EnemyHitCondition::EnemyHitCondition(Agent * agent,const bool hit)
+	:ConditionNode(agent)
 {
-	m_name = "Close Combat Condition";
-	SetIsWithinCombatRange(within_combat_range);
+	m_name = "Enemy Hit Condition";
+	SetIsHit(hit);
 }
 
-CloseCombatCondition::~CloseCombatCondition()
+EnemyHitCondition::~EnemyHitCondition()
 = default;
 
-void CloseCombatCondition::SetIsWithinCombatRange(const bool state)
+void EnemyHitCondition::SetIsHit(const bool state)
 {
-	m_isWithinCombatRange = state;
+	m_isHit = state;
 }
 
-bool CloseCombatCondition::Condition()
+bool EnemyHitCondition::Condition()
 {
-	return m_isWithinCombatRange;
+	return m_isHit;
 }
