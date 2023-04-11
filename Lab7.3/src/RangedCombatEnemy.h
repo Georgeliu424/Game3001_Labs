@@ -38,7 +38,16 @@ public:
 	//New for Lab 7.2
 	void Patrol() override;
 	void MoveToRange() override;
-	[[nodiscard]] DecisionTree * GetTree() const;
+
+	//New for Lab 7.3
+	void Flee() override;
+	void MoveToLOS() override;
+	void MoveToCover() override;
+	void WaitBehindCover() override;
+	void Attack() override;
+
+	//Get reference for Tree
+	[[nodiscard]] DecisionTree* GetTree() const;
 
 private:
 	// private movement variables
