@@ -1,20 +1,22 @@
-#include "AttackAction.h"
+#include "FleeAction.h"
 
 #include <iostream>
 
-AttackAction::AttackAction()
+FleeAction::FleeAction(Agent * agent)
+	:ActionNode(agent)
 {
-	m_name = "Attack Action";
+	m_name = "Flee Action";
 }
 
-AttackAction::~AttackAction()
+FleeAction::~FleeAction()
 = default;
 
-void AttackAction::Action()
+void FleeAction::Action()
 {
-	if(GetAgent()->GetActionState() != ActionState::ATTACK)
+	if(GetAgent()->GetActionState() != ActionState::FLEE)
 	{
 		std::cout << "Performing " << m_name << std::endl;
-		GetAgent()->SetActionState(ActionState::ATTACK);
+		GetAgent()->SetActionState(ActionState::FLEE);
 	}
+	GetAgent()->Flee();
 }

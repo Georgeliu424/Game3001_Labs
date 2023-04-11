@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-AttackAction::AttackAction()
+AttackAction::AttackAction(Agent * agent)
+	:ActionNode(agent)
 {
 	m_name = "Attack Action";
 }
@@ -17,4 +18,5 @@ void AttackAction::Action()
 		std::cout << "Performing " << m_name << std::endl;
 		GetAgent()->SetActionState(ActionState::ATTACK);
 	}
+	GetAgent()->Attack();
 }
