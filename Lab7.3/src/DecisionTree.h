@@ -43,6 +43,15 @@ public:
 	void SetCloseCombatNode(CloseCombatCondition* node);
 	void SetRangedCombatNode(RangedCombatCondition* node);
 
+	//New for Lab 7.3
+	[[nodiscard]] EnemyHealthCondition* GetEnemyHealthNode() const;
+	[[nodiscard]] EnemyHitCondition* GetEnemyHitNode() const;
+	[[nodiscard]] PlayerDetectedCondition* GetPlayerDetectedNode() const;
+
+	void SetEnemyHealthNode(EnemyHealthCondition* node);
+	void SetEnemyHitNode(EnemyHitCondition* node);
+	void SetPlayerDetectedNode(PlayerDetectedCondition* node);
+
 	// Public Utility / Convenience functions
 	TreeNode* AddNode(TreeNode* parent, TreeNode* child_node, TreeNodeType type);
 
@@ -62,6 +71,11 @@ private:
 
 	//New for Lab 7.2
 	RangedCombatCondition* m_RangedCombatNode{};
+
+	// New for Lab 7.3
+	EnemyHealthCondition* m_EnemyHealthNode{};
+	EnemyHitCondition* m_EnemyHitNode{};
+	PlayerDetectedCondition* m_PlayerDetectedNode{};
 
 	// Tree Node List
 	std::vector<TreeNode*> m_treeNodeList;
