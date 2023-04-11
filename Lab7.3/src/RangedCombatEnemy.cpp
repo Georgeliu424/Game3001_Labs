@@ -51,7 +51,7 @@ RangedCombatEnemy::~RangedCombatEnemy()
 void RangedCombatEnemy::Draw()
 {
 	// draw the RangedCombatEnemy
-	TextureManager::Instance().Draw("close_combat_enemy", 
+	TextureManager::Instance().Draw("ranged_combat_enemy", 
 		GetTransform()->position, static_cast<double>(GetCurrentHeading()), 255, true);
 
 	if (EventManager::Instance().IsIMGUIActive())

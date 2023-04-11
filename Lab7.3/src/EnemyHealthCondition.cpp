@@ -1,6 +1,6 @@
 #include "EnemyHealthCondition.h"
 
-EnemyHealthCondition::EnemyHealthCondition(Agent *agent,const bool healthy)
+EnemyHealthCondition::EnemyHealthCondition(Agent* agent,const bool healthy)
 	:ConditionNode(agent)
 {
 	m_name = "Enemy Health Condition";

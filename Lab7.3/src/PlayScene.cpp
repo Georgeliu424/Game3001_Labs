@@ -24,11 +24,16 @@ void PlayScene::Draw()
 
 	if(m_isGridEnabled)
 	{
+		// Draws collision bounds for each obstacle 
 		for (const auto obstacle : m_pObstacles)
 		{
 			Util::DrawRect(obstacle->GetTransform()->position - glm::vec2(obstacle->GetWidth() * 0.5f,
 				obstacle->GetHeight() * 0.5f), obstacle->GetWidth(), obstacle->GetHeight());
 		}
+
+		//new for Lab 7.3 - Draw Detection radius
+		auto detected = m_pStarship->GetTree()->GetPlayerDetectedNode()->GetDetected();
+		Util::DrawCircle(m_pStarship->GetTransform()->position, 300.0f, detected ? glm::vec4(0, 1, 0, 1) : glm::vec4(1, 0, 0, 1));
 	}
 
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
@@ -38,7 +43,20 @@ void PlayScene::Update()
 {
 	UpdateDisplayList();
 
-	m_pStarship->GetTree()->GetLOSNode()->SetLOS(m_pStarship->CheckAgentLOSToTarget(m_pTarget, m_pObstacles));
+	//Setup Ranged Combat Enemy
+	m_pStarship->GetTree()->GetEnemyHealthNode()->SetHealth(m_pStarship->GetHealth() > 25);
+	m_pStarship->GetTree()->GetEnemyHitNode()->SetIsHit(false);
+	m_pStarship->CheckAgentLOSToTarget(m_pTarget, m_pObstacles);
+	//Distance check between the Starship and Target for detection radius
+	const float distance = Util::Distance(m_pStarship->GetTransform()->position, m_pTarget->GetTransform()->position);
+
+	//Radius Detection...just outside of LOS Range (around 300px)
+	m_pStarship->GetTree()->GetPlayerDetectedNode()->SetDetected(distance < 300);
+
+	//Within LOS distance... but not close (optimum firing range)
+	m_pStarship->GetTree()->GetRangedCombatNode()->SetIsWithinCombatRange(distance >= 200 && distance <= 350);
+
+
 	switch(m_LOSMode)
 	{
 	case LOSMode::TARGET:
@@ -83,7 +101,7 @@ void PlayScene::HandleEvents()
 void PlayScene::Start()
 {
 	// Set GUI Title
-	m_guiTitle = "Lab 7 - Part 2";
+	m_guiTitle = "Lab 7 - Part 3";
 
 	// Setup a few more fields
 	m_LOSMode = LOSMode::TARGET;
@@ -98,8 +116,8 @@ void PlayScene::Start()
 	m_pTarget->GetTransform()->position = glm::vec2(500.0f, 300.0f);
 	AddChild(m_pTarget, 2);
 
-	m_pStarship = new CloseCombatEnemy();
-	//m_pStarship = new RangedCombatEnemy();
+	/*m_pStarship = new CloseCombatEnemy();*/
+	m_pStarship = new RangedCombatEnemy();
 	m_pStarship->GetTransform()->position = glm::vec2(400.0f, 40.0f);
 	AddChild(m_pStarship, 2);
 
@@ -120,11 +138,11 @@ void PlayScene::Start()
 
 	// Preload Music
 	SoundManager::Instance().Load("../Assets/Audio/Mutara.mp3", "mutara", SoundType::SOUND_MUSIC);
-	SoundManager::Instance().Load("../Assets/Audio/Kingon.mp3", "klingon", SoundType::SOUND_MUSIC);
+	SoundManager::Instance().Load("../Assets/Audio/Klingon.mp3", "Klingon", SoundType::SOUND_MUSIC);
 	SoundManager::Instance().SetMusicVolume(16);
 
 	// Play Music
-	SoundManager::Instance().PlayMusic("klingon");
+	SoundManager::Instance().PlayMusic("Klingon");
 
 	ImGuiWindowFrame::Instance().SetGuiFunction(std::bind(&PlayScene::GUI_Function, this));
 }

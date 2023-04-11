@@ -1,4 +1,4 @@
-#pragma once
+ #pragma once
 #ifndef __PLAY_SCENE__
 #define __PLAY_SCENE__
 
@@ -7,6 +7,7 @@
 #include "Scene.h"
 #include "Target.h"
 #include "PathNode.h"
+
 #include "CloseCombatEnemy.h"
 #include "RangedCombatEnemy.h"
 // New for Lab 7.1
@@ -42,8 +43,8 @@ private:
 	Background* m_pBackground;
 
 	// New for Lab 7.2
-	CloseCombatEnemy* m_pStarship;
-	//RangedCombatEnemy* m_pStarship;
+	/*CloseCombatEnemy* m_pStarship;*/
+	RangedCombatEnemy* m_pStarship;
 
 	void BuildObstaclePool();
 

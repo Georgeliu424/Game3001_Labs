@@ -7,7 +7,7 @@
 class EnemyHealthCondition : public ConditionNode
 {
 public:
-	EnemyHealthCondition(Agent * agent = nullptr, bool healthy = false);
+	EnemyHealthCondition(Agent * agent = nullptr, bool healthy = true);
 	virtual ~EnemyHealthCondition();
 
 	// Setter
