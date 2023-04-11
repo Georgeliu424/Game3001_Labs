@@ -1,16 +1,16 @@
 #pragma once
-#ifndef __ATTACK_ACTION__
-#define __ATTACK_ACTION__
+#ifndef __WAIT_BEHIND_COVER_ACTION__
+#define __WAIT_BEHIND_COVER_ACTION__ 
 
 #include "ActionNode.h"
 
-class AttackAction : public ActionNode
+class WaitBehindCoverAction : public ActionNode
 {
 public:
-	AttackAction();
-	virtual ~AttackAction();
+	WaitBehindCoverAction(Agent* agent = nullptr);
+	virtual ~WaitBehindCoverAction();
 
 	virtual void Action() override; // Define our action here
 };
 
-#endif /* defined (__ATTACK_ACTION__) */
+#endif /* defined (__WAIT_BEHIND_COVER_ACTION__) */

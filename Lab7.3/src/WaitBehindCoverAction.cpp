@@ -1,20 +1,22 @@
-#include "AttackAction.h"
+#include "WaitBehindCoverAction.h"
 
 #include <iostream>
 
-AttackAction::AttackAction()
+WaitBehindCoverAction::WaitBehindCoverAction(Agent * agent)
+	:ActionNode(agent)
 {
 	m_name = "Attack Action";
 }
 
-AttackAction::~AttackAction()
+WaitBehindCoverAction::~WaitBehindCoverAction()
 = default;
 
-void AttackAction::Action()
+void WaitBehindCoverAction::Action()
 {
-	if(GetAgent()->GetActionState() != ActionState::ATTACK)
+	if(GetAgent()->GetActionState() != ActionState::WAIT_BEHIND_COVER)
 	{
 		std::cout << "Performing " << m_name << std::endl;
-		GetAgent()->SetActionState(ActionState::ATTACK);
+		GetAgent()->SetActionState(ActionState::WAIT_BEHIND_COVER);
 	}
+	GetAgent()->WaitBehindCover();
 }

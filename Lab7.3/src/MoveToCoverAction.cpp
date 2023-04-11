@@ -1,20 +1,22 @@
-#include "AttackAction.h"
+#include "MoveToCoverAction.h"
 
 #include <iostream>
 
-AttackAction::AttackAction()
+MoveToCoverAction::MoveToCoverAction(Agent * agent)
+	:ActionNode(agent)
 {
-	m_name = "Attack Action";
+	m_name = "Move To Cover Action";
 }
 
-AttackAction::~AttackAction()
+MoveToCoverAction::~MoveToCoverAction()
 = default;
 
-void AttackAction::Action()
+void MoveToCoverAction::Action()
 {
-	if(GetAgent()->GetActionState() != ActionState::ATTACK)
+	if(GetAgent()->GetActionState() != ActionState::MOVE_TO_COVER)
 	{
 		std::cout << "Performing " << m_name << std::endl;
-		GetAgent()->SetActionState(ActionState::ATTACK);
+		GetAgent()->SetActionState(ActionState::MOVE_TO_COVER);
 	}
+	GetAgent()->MoveToCover();
 }

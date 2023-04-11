@@ -2,7 +2,8 @@
 
 #include <iostream>
 
-MoveToPlayerAction::MoveToPlayerAction()
+MoveToPlayerAction::MoveToPlayerAction(Agent * agent)
+	:ActionNode(agent)
 {
 	m_name = "Move To Player Action";
 }
@@ -17,4 +18,5 @@ void MoveToPlayerAction::Action()
 		std::cout << "Performing " << m_name << std::endl;
 		GetAgent()->SetActionState(ActionState::MOVE_TO_PLAYER);
 	}
+	GetAgent()->MoveToPlayer();
 }

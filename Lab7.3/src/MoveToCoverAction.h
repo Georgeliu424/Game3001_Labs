@@ -1,16 +1,16 @@
 #pragma once
-#ifndef __ATTACK_ACTION__
-#define __ATTACK_ACTION__
+#ifndef __MOVE_TO_COVER_ACTION__
+#define __MOVE_TO_COVER_ACTION__
 
 #include "ActionNode.h"
 
-class AttackAction : public ActionNode
+class MoveToCoverAction : public ActionNode
 {
 public:
-	AttackAction();
-	virtual ~AttackAction();
+	MoveToCoverAction(Agent * agent =nullptr);
+	virtual ~MoveToCoverAction();
 
 	virtual void Action() override; // Define our action here
 };
 
-#endif /* defined (__ATTACK_ACTION__) */
+#endif /* defined (__MOVE_TO_COVER_ACTION__) */
