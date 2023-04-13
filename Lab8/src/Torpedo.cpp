@@ -5,7 +5,7 @@ Torpedo::Torpedo(const float speed ): m_currentAnimationState(TorpedoAnimationSt
 {
 	TextureManager::Instance().LoadSpriteSheet(
 		"../Assets/sprites/torpedo.txt",
-		"../Assets/sprites/torpedo.png", 
+		"../Assets/sprites/torpedo.png",
 		"torpedosheet");
 
 	SetSpriteSheet(TextureManager::Instance().GetSpriteSheet("torpedosheet"));

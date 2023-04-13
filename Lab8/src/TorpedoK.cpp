@@ -5,11 +5,11 @@ TorpedoK::TorpedoK(const float speed,glm::vec2 direction )
 : m_currentAnimationState(TorpedoAnimationState::FIRED),m_speed(speed)
 {
 	TextureManager::Instance().LoadSpriteSheet(
-		"../Assets/sprites/torpedoK.txt",
+		"../Assets/sprites/torpedo.txt",
 		"../Assets/sprites/torpedo_k.png", 
-		"TorpedoKsheet");
+		"torpedoKsheet");
 
-	SetSpriteSheet(TextureManager::Instance().GetSpriteSheet("TorpedoKsheet"));
+	SetSpriteSheet(TextureManager::Instance().GetSpriteSheet("torpedoKsheet"));
 	
 	// set frame width
 	SetWidth(64);
