@@ -192,6 +192,7 @@
     <ClCompile Include="..\src\StarShip.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
     <ClCompile Include="..\src\Torpedo.cpp" />
+    <ClCompile Include="..\src\TorpedoK.cpp" />
     <ClCompile Include="..\src\UIControl.cpp" />
     <ClCompile Include="..\src\DisplayObject.cpp" />
     <ClCompile Include="..\src\EndScene.cpp" />
@@ -267,6 +268,7 @@
     <ClInclude Include="..\src\TileStatus.h" />
     <ClInclude Include="..\src\Torpedo.h" />
     <ClInclude Include="..\src\TorpedoAnimationState.h" />
+    <ClInclude Include="..\src\TorpedoK.h" />
     <ClInclude Include="..\src\TreeNode.h" />
     <ClInclude Include="..\src\TreeNodeType.h" />
     <ClInclude Include="..\src\UIControl.h" />

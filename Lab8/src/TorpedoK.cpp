@@ -1,14 +1,15 @@
-#include "Torpedo.h"
+#include "TorpedoK.h"
 #include "TextureManager.h"
 
-Torpedo::Torpedo(const float speed ): m_currentAnimationState(TorpedoAnimationState::FIRED),m_speed(speed)
+TorpedoK::TorpedoK(const float speed,glm::vec2 direction )
+: m_currentAnimationState(TorpedoAnimationState::FIRED),m_speed(speed)
 {
 	TextureManager::Instance().LoadSpriteSheet(
-		"../Assets/sprites/torpedo.txt",
-		"../Assets/sprites/torpedo.png", 
-		"torpedosheet");
+		"../Assets/sprites/torpedoK.txt",
+		"../Assets/sprites/torpedo_k.png", 
+		"TorpedoKsheet");
 
-	SetSpriteSheet(TextureManager::Instance().GetSpriteSheet("torpedosheet"));
+	SetSpriteSheet(TextureManager::Instance().GetSpriteSheet("TorpedoKsheet"));
 	
 	// set frame width
 	SetWidth(64);
@@ -22,19 +23,21 @@ Torpedo::Torpedo(const float speed ): m_currentAnimationState(TorpedoAnimationSt
 	GetRigidBody()->isColliding = false;
 	SetType(GameObjectType::PROJECTILE);
 
+	m_direction = { direction.x * speed, direction.y * speed };
+
 	BuildAnimations();
 }
 
-Torpedo::~Torpedo()
+TorpedoK::~TorpedoK()
 = default;
 
-void Torpedo::Draw()
+void TorpedoK::Draw()
 {
-	// draw the Torpedo according to animation state
-	switch(m_currentAnimationState)
+	// draw the TorpedoK according to animation state
+	switch (m_currentAnimationState)
 	{
 	case TorpedoAnimationState::FIRED:
-		TextureManager::Instance().PlayAnimation("torpedosheet", GetAnimation("fired"),
+		TextureManager::Instance().PlayAnimation("torpedoKsheet", GetAnimation("fired"),
 			GetTransform()->position, 5.0f, 0, 255, true);
 		break;
 	default:
@@ -42,23 +45,23 @@ void Torpedo::Draw()
 	}
 }
 
-void Torpedo::Update()
+void TorpedoK::Update()
 {
-	GetTransform()->position.x += m_speed;
+	GetTransform()->position += m_direction;
 }
 
-void Torpedo::Clean()
+void TorpedoK::Clean()
 {
 }
 
-void Torpedo::SetAnimationState(const TorpedoAnimationState new_state)
+void TorpedoK::SetAnimationState(const TorpedoAnimationState new_state)
 {
 	m_currentAnimationState = new_state;
 }
 
-void Torpedo::BuildAnimations()
+void TorpedoK::BuildAnimations()
 {
-	auto fired_animation = Animation(); 
+	auto fired_animation = Animation();
 
 	fired_animation.name = "fired";
 	fired_animation.frames.push_back(GetSpriteSheet()->GetFrame("fired1"));
