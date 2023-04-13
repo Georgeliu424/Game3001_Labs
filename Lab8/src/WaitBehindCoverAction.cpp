@@ -5,7 +5,7 @@
 WaitBehindCoverAction::WaitBehindCoverAction(Agent * agent)
 	:ActionNode(agent)
 {
-	m_name = "Attack Action";
+	m_name = "Wait Behind Cover Action";
 }
 
 WaitBehindCoverAction::~WaitBehindCoverAction()

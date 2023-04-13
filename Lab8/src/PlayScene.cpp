@@ -101,6 +101,30 @@ void PlayScene::HandleEvents()
 	{
 		Game::Instance().ChangeSceneState(SceneState::END);
 	}
+	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_F))
+	{
+		// Torpedo will fire
+		m_pTorpedoes.push_back(new Torpedo(5.0f)); // Instantiate a torpedo
+		m_pTarget->SetCurrentDirection(glm::vec2(1.0f, 0.0f));
+		m_pTorpedoes.back()->GetTransform()->position = m_pTarget->GetTransform()->position + m_pTarget->GetCurrentDirection() * 30.0f ; // Spawn point
+		SoundManager::Instance().SetSoundVolume(50);
+		SoundManager::Instance().PlaySoundFX("torpedo");
+		AddChild(m_pTorpedoes.back(), 2);
+	}
+	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_K))
+	{
+		m_pStarship->TakeDamage(10); // StarShip takes damage.
+		m_pStarship->GetTree()->GetEnemyHitNode()->SetIsHit(true);
+		std::cout << "Starship at" << m_pStarship->GetHealth() << " %." << std::endl;
+	}
+	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_R))
+	{
+		m_pStarship->SetHealth(100); 
+		m_pStarship->GetTree()->GetEnemyHitNode()->SetIsHit(false);
+		m_pStarship->GetTree()->GetPlayerDetectedNode()->SetDetected(false);
+		m_pStarship->GetTransform()->position = glm::vec2(40.0f, 40.0f);
+		std::cout << "Conditions Reset" << std::endl;
+	}
 }
 
 void PlayScene::Start()
