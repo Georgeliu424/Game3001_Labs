@@ -3,30 +3,25 @@
 #define __TORPEDO_K__
 
 #include "TorpedoAnimationState.h"
-#include "Sprite.h"
+#include "Torpedo.h"
 
-class TorpedoK final : public Sprite
+class TorpedoK final : public Torpedo
 {
 public:
-	TorpedoK(float speed =0.0f,glm::vec2 direction = {0,0});
-	~TorpedoK() override;
+    TorpedoK(float speed = 0.0f, glm::vec2 direction = { 0, 0 });
+    virtual ~TorpedoK();
 
-	// Life Cycle Methods
-	virtual void Draw() override;
-	virtual void Update() override;
-	virtual void Clean() override;
-
-	// setters
-	void SetAnimationState(TorpedoAnimationState new_state);
+    // Life Cycle Methods
+    virtual void Draw() override;
+    virtual void Update() override;
+    virtual void Clean() override;
 
 private:
-	void BuildAnimations();
+    void BuildAnimations();
 
-	TorpedoAnimationState m_currentAnimationState;
+    glm::vec2 m_direction;
 
-	float m_speed;
 
-	glm::vec2 m_direction;
 };
 
 #endif /* defined (__TORPEDO_K__) */

@@ -1,15 +1,16 @@
 #include "Torpedo.h"
 #include "TextureManager.h"
 
-Torpedo::Torpedo(const float speed ): m_currentAnimationState(TorpedoAnimationState::FIRED),m_speed(speed)
+Torpedo::Torpedo(float speed)
+	: m_currentAnimationState(TorpedoAnimationState::FIRED), m_speed(speed)
 {
+
 	TextureManager::Instance().LoadSpriteSheet(
 		"../Assets/sprites/torpedo.txt",
 		"../Assets/sprites/torpedo.png",
 		"torpedosheet");
 
 	SetSpriteSheet(TextureManager::Instance().GetSpriteSheet("torpedosheet"));
-	
 	// set frame width
 	SetWidth(64);
 
@@ -58,7 +59,7 @@ void Torpedo::SetAnimationState(const TorpedoAnimationState new_state)
 
 void Torpedo::BuildAnimations()
 {
-	auto fired_animation = Animation(); 
+	Animation fired_animation = Animation(); 
 
 	fired_animation.name = "fired";
 	fired_animation.frames.push_back(GetSpriteSheet()->GetFrame("fired1"));

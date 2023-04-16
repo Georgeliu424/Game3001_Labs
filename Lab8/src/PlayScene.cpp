@@ -102,7 +102,8 @@ void PlayScene::HandleEvents()
 		Game::Instance().ChangeSceneState(SceneState::END);
 	}
 	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_F))
-	{
+	{//Set Spawn Point(front of our d7)
+
 		// Torpedo will fire
 		m_pTorpedoes.push_back(new Torpedo(5.0f)); // Instantiate a torpedo
 		m_pTarget->SetCurrentDirection(glm::vec2(1.0f, 0.0f));

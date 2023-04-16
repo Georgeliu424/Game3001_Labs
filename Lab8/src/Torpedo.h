@@ -5,26 +5,25 @@
 #include "TorpedoAnimationState.h"
 #include "Sprite.h"
 
-class Torpedo final : public Sprite
+class Torpedo : public Sprite
 {
 public:
-	Torpedo(float speed =0.0f);
-	~Torpedo() override;
+    Torpedo(float speed = 0.0f);
+    virtual ~Torpedo();
 
-	// Life Cycle Methods
-	virtual void Draw() override;
-	virtual void Update() override;
-	virtual void Clean() override;
+    // Life Cycle Methods
+    virtual void Draw() override;
+    virtual void Update() override;
+    virtual void Clean() override;
 
-	// setters
-	void SetAnimationState(TorpedoAnimationState new_state);
+    // setters
+    void SetAnimationState(TorpedoAnimationState new_state);
 
-private:
-	void BuildAnimations();
+protected:
+    void BuildAnimations();
 
-	TorpedoAnimationState m_currentAnimationState;
-
-	float m_speed;
+    TorpedoAnimationState m_currentAnimationState;
+    float m_speed;
 };
 
 #endif /* defined (__TORPEDO__) */
