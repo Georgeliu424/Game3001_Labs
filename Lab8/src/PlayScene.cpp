@@ -56,6 +56,9 @@ void PlayScene::Update()
 	//Within LOS distance... but not close (optimum firing range)
 	m_pStarship->GetTree()->GetRangedCombatNode()->SetIsWithinCombatRange(distance >= 200 && distance <= 350);
 
+	////Close Range
+	//m_pStarship->GetTree()->GetRangedCombatNode()->SetIsWithinCombatRange(distance >= 0 && distance <= 100);
+
 
 	switch(m_LOSMode)
 	{
@@ -146,7 +149,7 @@ void PlayScene::Start()
 	m_pTarget->GetTransform()->position = glm::vec2(500.0f, 300.0f);
 	AddChild(m_pTarget, 2);
 
-	/*m_pStarship = new CloseCombatEnemy();*/
+	//m_pStarship = new CloseCombatEnemy(this);
 	m_pStarship = new RangedCombatEnemy(this);
 	m_pStarship->GetTransform()->position = glm::vec2(400.0f, 40.0f);
 	AddChild(m_pStarship, 2);

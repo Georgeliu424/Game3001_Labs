@@ -15,6 +15,7 @@
 #include "DecisionTree.h"
 #include "Torpedo.h"
 #include "TorpedoK.h"
+#include "TorpedoF.h"
 
 
  class PlayScene : public Scene
@@ -49,7 +50,7 @@ private:
 	Background* m_pBackground;
 
 	// New for Lab 7.2
-	/*CloseCombatEnemy* m_pStarship;*/
+	//CloseCombatEnemy* m_pStarship;
 	RangedCombatEnemy* m_pStarship;
 
 	void BuildObstaclePool();

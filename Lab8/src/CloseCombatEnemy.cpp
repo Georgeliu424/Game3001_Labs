@@ -10,8 +10,8 @@
 #include "PatrolAction.h"
 #include "MoveToLOSAction.h"
 
-CloseCombatEnemy::CloseCombatEnemy() : m_maxSpeed(20.0f),
-                                       m_turnRate(5.0f), m_accelerationRate(2.0f), m_startPosition(glm::vec2(300.0f, 500.0f))
+CloseCombatEnemy::CloseCombatEnemy(Scene* Scene) : m_maxSpeed(20.0f),
+                                       m_turnRate(5.0f), m_accelerationRate(2.0f), m_startPosition(glm::vec2(300.0f, 500.0f)),m_pScene(Scene)
 {
 	TextureManager::Instance().Load("../Assets/textures/d7_small.png", "close_combat_enemy");
 
@@ -40,6 +40,9 @@ CloseCombatEnemy::CloseCombatEnemy() : m_maxSpeed(20.0f),
 	m_tree = new DecisionTree(this); // create a new tree - AI brain
 	m_buildTree();
 	m_tree -> Display();
+
+	MinRange = 30.0f;
+	MaxRange = 200.0f;
 }
 
 CloseCombatEnemy::~CloseCombatEnemy()
@@ -115,6 +118,8 @@ void CloseCombatEnemy::Seek()
 	// New for Lab 7.1
 	// Find Next Waypoint if within 10px of the current waypoint
 
+	if (!m_movingToPlayer)
+	{
 	if(Util::Distance(m_patrolPath[m_wayPoint], GetTransform()->position) < 10)
 	{
 		// check to see if you are at the last point in the path
@@ -133,6 +138,7 @@ void CloseCombatEnemy::Seek()
 	LookWhereYoureGoing(steering_direction);
 
 	GetRigidBody()->acceleration = GetCurrentDirection() * GetAccelerationRate();
+	}
 }
 
 void CloseCombatEnemy::LookWhereYoureGoing(const glm::vec2 target_direction)
@@ -179,6 +185,7 @@ void CloseCombatEnemy::Patrol()
 		SetActionState(ActionState::PATROL);
 	}
 	m_move();
+	m_movingToPlayer = false;
 }
 
 void CloseCombatEnemy::MoveToPlayer()
@@ -187,7 +194,12 @@ void CloseCombatEnemy::MoveToPlayer()
 	{
 		SetActionState(ActionState::MOVE_TO_PLAYER);
 	}
-	//todo::Setup another action to take when moving to player 
+	//todo::Setup another action to take when moving to player
+	auto scene = dynamic_cast<PlayScene*>(m_pScene);
+	
+	SetTargetPosition(scene->GetTarget()->GetTransform()->position);
+	m_move();
+
 }
 
 DecisionTree* CloseCombatEnemy::GetTree() const

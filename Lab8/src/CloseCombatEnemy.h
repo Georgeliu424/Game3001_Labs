@@ -9,7 +9,7 @@ class CloseCombatEnemy : public Agent
 {
 public:
 	// Constructor Function
-	CloseCombatEnemy();
+	CloseCombatEnemy(Scene* Scene);
 
 	// Destructor Function
 	~CloseCombatEnemy();
@@ -61,6 +61,14 @@ private:
 	//New for Lab 7.2
 	DecisionTree* m_tree;
 	void m_buildTree();
+
+	// Lab 8
+	Scene* m_pScene;
+	bool m_movingToPlayer = false;
+
+	float MinRange;
+	float MaxRange;
+
 
 };
 
