@@ -11,7 +11,7 @@
 #include "MoveToLOSAction.h"
 
 CloseCombatEnemy::CloseCombatEnemy(Scene* Scene) : m_maxSpeed(20.0f),
-                                       m_turnRate(5.0f), m_accelerationRate(2.0f), m_startPosition(glm::vec2(300.0f, 500.0f)),m_pScene(Scene)
+m_turnRate(5.0f), m_accelerationRate(2.0f), m_startPosition(glm::vec2(300.0f, 500.0f)),m_pScene(Scene)
 {
 	TextureManager::Instance().Load("../Assets/textures/d7_small.png", "close_combat_enemy");
 
