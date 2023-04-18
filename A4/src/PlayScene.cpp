@@ -108,7 +108,8 @@ void PlayScene::HandleEvents()
 	}
 	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_K))
 	{
-		m_pStarship->TakeDamage(10); // StarShip takes damage.
+		m_pStarship->TakeDamage(25); // StarShip takes damage.
+		m_pTorpedoes.push_back(new Torpedo(5.0f));
 		m_pStarship->GetTree()->GetEnemyHitNode()->SetIsHit(true);
 		std::cout << "Starship at" << m_pStarship->GetHealth() << " %." << std::endl;
 	}
@@ -125,7 +126,7 @@ void PlayScene::HandleEvents()
 void PlayScene::Start()
 {
 	// Set GUI Title
-	m_guiTitle = "Lab 8";
+	m_guiTitle = "A4";
 
 	// Setup a few more fields
 	m_LOSMode = LOSMode::TARGET;

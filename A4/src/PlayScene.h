@@ -43,7 +43,6 @@ private:
 
 	// Game Objects for the Scene
 	Target* m_pTarget;
-	//StarShip* m_pStarShip;
 	std::vector<Obstacle*> m_pObstacles;
 
 	// New for Lab 7.1

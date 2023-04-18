@@ -6,7 +6,7 @@
 
 Ship::Ship() : m_maxSpeed(10.0f)
 {
-	TextureManager::Instance().Load("../Assets/textures/d7_small.png", "ship");
+	TextureManager::Instance().Load("../Assets/textures/Enemy_00.png", "ship");
 
 	const auto size = TextureManager::Instance().GetTextureSize("ship");
 	SetWidth(static_cast<int>(size.x));
