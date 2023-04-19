@@ -16,9 +16,6 @@ Target::Target():m_maxSpeed(10.0f)
 
 
 	m_turnRate = 10.0f; // 5 degrees per frame
-	m_maxSpeed = 5.0f;
-
-	m_dbgMode = false;
 
 
 	SetType(GameObjectType::TARGET);
@@ -98,10 +95,7 @@ void Target::setMaxSpeed(float newSpeed)
 	m_maxSpeed = newSpeed;
 }
 
-void Target::flipDbg()
-{
-	m_dbgMode = !m_dbgMode;
-}
+
 
 void Target::setOrientation(glm::vec2 orientation)
 {
@@ -118,7 +112,7 @@ void Target::setRotation(float angle)
 	auto x = cos(angle_in_radians);
 	auto y = sin(angle_in_radians);
 
-	// convert the angle to a normalized vector and store it in Orientation
+	
 	setOrientation(glm::vec2(x, y));
 }
 

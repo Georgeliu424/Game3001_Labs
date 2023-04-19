@@ -121,6 +121,8 @@ void PlayScene::HandleEvents()
 		m_pTarget->setAnimating(false);
 	}
 
+	
+
 
 	if (EventManager::Instance().KeyPressed(SDL_SCANCODE_F))
 	{//Set Spawn Point(front of our d7)

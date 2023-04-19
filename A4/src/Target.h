@@ -26,7 +26,7 @@ public:
 	float getRotation();
 
 	void setMaxSpeed(float newSpeed);
-	void flipDbg();
+	
 	void setOrientation(glm::vec2 orientation);
 	void setRotation(float angle);
 	void setDestination(glm::vec2 destination);
@@ -45,7 +45,6 @@ private:
 	float m_turnRate;
 	float m_rotationAngle;
 
-	bool m_dbgMode;
 	bool m_isAnimating;
 
 	int m_frameCounter;
