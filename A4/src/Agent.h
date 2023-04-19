@@ -80,6 +80,9 @@ public:
 	virtual void MoveToCover(){}
 	virtual void WaitBehindCover(){}
 
+	virtual void setGoingRight(bool b);
+	bool getGoingRight();
+
 private:
 	void ChangeDirection();
 	float m_currentHeading;
@@ -100,6 +103,7 @@ private:
 	glm::vec4 m_lineColour[5];
 	bool m_collisionWhiskers[5];
 	float m_whiskerAngle;
+	bool m_GoingRight;
 
 	// New for Lab 7.1
 	ActionState m_actionState;

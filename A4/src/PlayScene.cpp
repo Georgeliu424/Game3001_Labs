@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "Util.h"
 #include <fstream>
+#include "PlayerAnimationState.h"
 
 PlayScene::PlayScene()
 {
@@ -92,6 +93,32 @@ void PlayScene::HandleEvents()
 	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_ESCAPE))
 	{
 		Game::Instance().Quit();
+	}
+	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_W))
+	{
+		m_pTarget->GetTransform()->position.y -= m_pTarget->getMaxSpeed();
+		m_pTarget->setAnimating(true);
+	}
+	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_D))
+	{
+		m_pTarget->GetTransform()->position.x += m_pTarget->getMaxSpeed();
+		m_pTarget->setAnimating(true);
+		m_pTarget->setGoingRight(true);
+	}
+	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_S))
+	{
+		m_pTarget->GetTransform()->position.y += m_pTarget->getMaxSpeed();
+		m_pTarget->setAnimating(true);
+	}
+	if (EventManager::Instance().IsKeyDown(SDL_SCANCODE_A))
+	{
+		m_pTarget->GetTransform()->position.x -= m_pTarget->getMaxSpeed();
+		m_pTarget->setAnimating(true);
+		m_pTarget->setGoingRight(false);
+	}
+	if (!EventManager::Instance().IsKeyDown(SDL_SCANCODE_W) && !EventManager::Instance().IsKeyDown(SDL_SCANCODE_S) && !EventManager::Instance().IsKeyDown(SDL_SCANCODE_A) && !EventManager::Instance().IsKeyDown(SDL_SCANCODE_D))
+	{
+		m_pTarget->setAnimating(false);
 	}
 
 

@@ -256,6 +256,16 @@ void Agent::SetLOSColour(const glm::vec4 colour)
 	m_LOSColour = colour;
 }
 
+void Agent::setGoingRight(bool b)
+{
+	m_GoingRight = b;
+}
+
+bool Agent::getGoingRight()
+{
+	return m_GoingRight;
+}
+
 void Agent::ChangeDirection()
 {
 	const auto x = cos(m_currentHeading * Util::Deg2Rad);
